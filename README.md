@@ -1,2 +1,2 @@
-# GaymersPronouns
-A simple, yet very customizable Minecraft chat plugin that adds pronouns.
+# Gaymer's Pronouns
+A simple, yet very customizable Minecraft plugin that adds pronouns.

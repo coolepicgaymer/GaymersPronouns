@@ -1,0 +1,49 @@
+# numbers in the negatives will be shown separately from 0 and above.
+-1:
+  display: "Any"
+-2:
+  display: "Ask"
+-3:
+  display: "Other"
+-4:
+  display: "None"
+  subjective: "This player"
+  objective: "That player"
+  possessiveadj: "This player's"
+
+# these will be shown on the left side of the menu. feel free to copy one of these and add more pronouns. just make sure to change the id (number).
+1:
+  display: "He/Him"
+  subjective: "He"
+  objective: "Him"
+  possessiveadj: "His"
+2:
+  display: "She/Her"
+  subjective: "She"
+  objective: "Her"
+  possessiveadj: "Her"
+3:
+  display: "They/Them"
+  subjective: "They"
+  objective: "Them"
+  possessiveadj: "Their"
+4:
+  display: "It/Its"
+  subjective: "It"
+  objective: "It"
+  possessiveadj: "Its"
+5:
+  display: "Xe/Xem"
+  subjective: "Xe"
+  objective: "Xem"
+  possessiveadj: "Xyr"
+6:
+  display: "Ze/Zem"
+  subjective: "Ze"
+  objective: "Zem"
+  possessiveadj: "Zir"
+7:
+  display: "Ze/Hir"
+  subjective: "Ze"
+  objective: "Hir"
+  possessiveadj: "Hir"

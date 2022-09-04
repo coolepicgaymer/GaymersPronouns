@@ -1,0 +1,35 @@
+no-pronouns-reminder: "&cYou don't have any pronouns set. &7Click here to set them now."
+fluid-reminder: "&7Your pronouns are currently set to &c%s&7. Click here to change them, or ignore this to keep them."
+change-pronouns-hover: "&7Click here to change your pronouns now."
+pronouns-menu: "&7Pick your pronouns"
+pronoun-reminder-name: "&cToggle Pronoun Reminder"
+pronoun-reminder-lore: ["&7Click here to %s pronoun reminders.", "", "&7Enabling this will remind you what your", "&7current pronouns are, every time you join, so", "&7you can quickly change them."]
+cancel-name: "&cCancel"
+cancel-lore: ["&7Click here to cancel."]
+previous-page-name: "&cPrevious Page"
+next-page-name: "&cNext Page"
+toggle-fluid-reminders: "&7Pronoun reminders have now been %s."
+pronouns-set: "&7Your pronouns have been set to &c%s&7. You can change them at any time with /pronouns."
+initialize-multiple-name: "&cPick Multiple"
+initialize-multiple-lore: ["&7Click here to pick multiple pronouns."]
+not-enough-multiple-name: "&cNot enough..."
+not-enough-multiple-lore: ["&7You must pick at least one to continue."]
+barely-enough-multiple-name: "&cConfirm"
+barely-enough-multiple-lore: ["&7Click here to confirm your pick of pronouns."]
+confirm-multiple-name: "&cConfirm"
+confirm-multiple-lore: ["&7Click here to confirm your pick of pronouns."]
+max-pronouns-reached: "&7Sorry, but you can't pick more than %s pronouns."
+pronoun-chat-hover: ["&fThis player's pronouns are %s."]
+player-not-online: "&cThis player is not online right now."
+pronouns-other: "&7Pronouns of &f%s&7 is &f%s&7."
+info-item-name: "§cWhat are pronouns?"
+info-item-lore:
+  - "&7Pronouns are what people use to refer to you"
+  - "&7in third person."
+  - ""
+  - "§7Here are some examples:"
+  - "&8- &7&nHe&7 is very cool. I like &nhim&7."
+  - "&8- &7&nShe&7 is the best! There's nothing bad about &nher&7."
+  - "&8- &7&nThey&7 gave me a gift. Very thoughtful of &nthem&7."
+  - ""
+  - "&7How would you like to be referred to?"

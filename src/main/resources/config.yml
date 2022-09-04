@@ -1,0 +1,78 @@
+#------------------------------------------------------------------#
+#
+#      Welcome to the GaymersPronouns configuration file.
+#
+#      Thank you for making your server more inclusive.
+#
+#------------------------------------------------------------------#
+# I've tried my best to explain everything as you go, using these comments.
+# (Can be used with PlaceholderAPI: %GaymersPronouns_pronouns%)
+
+#
+# These are the default pronouns.
+# They will ONLY be used when absolutely needed, and when the player doesn't have pronouns set.
+#
+default-pronouns:
+  subjective: "They"
+  objective: "Them"
+  possessiveadj: "Their"
+
+#
+# This is the inclusive maximum of pronouns a player can have when picking multiple. Set to 0 for no maximum (not recommended).
+#
+max-pronouns: 3
+
+#
+# This is where the pronouns will be displayed. Remove the hashtag in front of the ones you want.
+# The format of how they're shown is edited further down, don't worry.
+#
+# Here's an explanation for them all:
+# - chatformat: just shown in chat alongside someone's name, as a prefix, suffix, or whatever else.
+# - chathover: shown when you hover over someone's name with your mouse after they send chat messages.
+# - tablist: shows alongside someone's name as a prefix/suffix in the tab list.
+#
+# All of these require a restart to work.
+#
+display:
+  #- chatformat
+  #- chathover
+  #- tablist
+
+display-format:
+
+  #
+  # This is how chat messages will look ONLY if chatformat is enabled above.
+  #
+  # Good to know:
+  # - Write "{PRONOUNS}" for it to be replaced with the player's pronouns.
+  # - Write "{DISPLAYNAME}" for it to be replaced with the player's display name.
+  # - Write "{USERNAME}" for it to be replaced with the player's username.
+  # - Supports PlaceholderAPI.
+  #
+  # IMPORTANT:
+  # - Write "{MESSAGE}" for it to be replaced with the message.
+  #
+  chat-format: "&7[{PRONOUNS}] {DISPLAYNAME}&7: &f{MESSAGE}"
+
+  #
+  # This is how the little box will look when you hover over someone's name ONLY if chathover is enabled above.
+  #
+  # Good to know:
+  # - Write "{PRONOUNS}" for it to be replaced with the player's pronouns.
+  # - Write "{DISPLAYNAME}" for it to be replaced with the player's display name.
+  # - Write "{USERNAME}" for it to be replaced with the player's username.
+  # - Supports PlaceholderAPI.
+  #
+  # This is written as a list to make room for multiple lines.
+  #
+  chat-hover: ["&7This player's pronouns are &f{PRONOUNS}&7."]
+
+  #
+  # This is how someone's name will look in the tab list ONLY if tablist is enabled above.
+  #
+  # IMPORTANT:
+  # - Write "{PRONOUNS}" for it to be replaced with the player's pronouns.
+  # - Write "{DISPLAYNAME}" for it to be replaced with the player's display name.
+  # - Write "{USERNAME}" for it to be replaced with the player's username.
+  #
+  tab-list: "{DISPLAYNAME} &7[{PRONOUNS}]"
