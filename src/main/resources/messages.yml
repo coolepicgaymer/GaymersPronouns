@@ -21,7 +21,7 @@ confirm-multiple-lore: ["&7Click here to confirm your pick of pronouns."]
 max-pronouns-reached: "&7Sorry, but you can't pick more than %s pronouns."
 pronoun-chat-hover: ["&fThis player's pronouns are %s."]
 player-not-online: "&cThis player is not online right now."
-pronouns-other: "&7Pronouns of &f%s&7 is &f%s&7."
+pronouns-other: "&7Pronouns of &f%s&7 are &f%s&7."
 info-item-name: "§cWhat are pronouns?"
 info-item-lore:
   - "&7Pronouns are what people use to refer to you"

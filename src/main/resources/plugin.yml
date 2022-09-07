@@ -1,9 +1,9 @@
 name: GaymersPronouns
 version: '${project.version}'
 main: coolepicgaymer.gaymerspronouns.GaymersPronouns
-api-version: 1.18
 softdepend: [ PlaceholderAPI ]
 authors: [ coolepicgaymer ]
+api-version: 1.16
 description: A simple, yet very customizable Minecraft chat plugin that adds pronouns.
 commands:
   pronouns:
