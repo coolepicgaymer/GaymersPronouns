@@ -8,4 +8,24 @@ description: A simple, yet very customizable Minecraft chat plugin that adds pro
 commands:
   pronouns:
     aliases: [ pronoun ]
-    description: Pick your pronouns.
+    description: Pick your pronouns or see others' pronouns.
+  gaymerspronouns:
+    aliases: [ gp ]
+    description: Admin command for GaymersPronouns.
+permissions:
+  gaymerspronouns.*:
+    description: Allows the player to do anything with the plugin.
+    default: op
+    children:
+      gaymerspronouns.admin: true
+      gaymerspronouns.assign: true
+      gaymerspronouns.configure: true
+      gaymerspronouns.reload: true
+  gaymerspronouns.admin:
+    description: Allows the player to use the admin command.
+  gaymerspronouns.assign:
+    description: Allows the player to assign pronouns to others.
+  gaymerspronouns.configure:
+    description: Allows the player to configure the plugin from in-game.
+  gaymerspronouns.reload:
+    description: Allows the player to reload the plugin.

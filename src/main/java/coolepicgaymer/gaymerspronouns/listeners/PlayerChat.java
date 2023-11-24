@@ -1,9 +1,7 @@
 package coolepicgaymer.gaymerspronouns.listeners;
 
+import coolepicgaymer.gaymerspronouns.utilities.GPUtils;
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
-import coolepicgaymer.gaymerspronouns.managers.DisplayManager;
-import coolepicgaymer.gaymerspronouns.managers.MessageManager;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -21,18 +19,20 @@ public class PlayerChat implements Listener {
 
     public PlayerChat(GaymersPronouns plugin) {
         this.plugin = plugin;
+    }
+
+    public void reload() {
         chatFormat = plugin.getConfig().getStringList("display").contains("chatformat");
         chatHover = plugin.getConfig().getStringList("display").contains("chathover");
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
-        String pronouns = GaymersPronouns.getUserManager().getDisplayUserPronouns(e.getPlayer().getUniqueId().toString());
-        if (chatFormat) e.setFormat(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(e.getPlayer(), plugin.getConfig().getString("display-format.chat-format").replace("{PRONOUNS}", pronouns).replace("{DISPLAYNAME}", e.getPlayer().getDisplayName()).replace("{USERNAME}", e.getPlayer().getName()).replace("{MESSAGE}", e.getMessage()))));
+        if (chatFormat) e.setFormat(ChatColor.translateAlternateColorCodes('&', GPUtils.replaceVariables(e.getPlayer(), plugin.getConfig().getString("display-format.chat-format").replace("{MESSAGE}", e.getMessage()))));
         if (chatHover) {
             e.setCancelled(true);
             TextComponent message = new TextComponent(e.getFormat());
-            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(e.getPlayer(), DisplayManager.replaceVariables(e.getPlayer(), String.join("\n", plugin.getConfig().getStringList("display-format.chat-hover"))))))));
+            message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.translateAlternateColorCodes('&', GPUtils.replaceVariables(e.getPlayer(), String.join("\n", plugin.getConfig().getStringList("display-format.chat-hover")))))));
             Bukkit.spigot().broadcast(message);
         }
     }

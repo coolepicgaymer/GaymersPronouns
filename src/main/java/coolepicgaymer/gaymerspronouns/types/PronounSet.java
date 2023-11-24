@@ -6,45 +6,44 @@ import coolepicgaymer.gaymerspronouns.managers.PronounManager;
 public class PronounSet {
 
     String display;
-    String displaysecond;
+    String dominant;
 
     String subjective;
     String objective;
-    String possessiveadj;
+    String possessive;
+    String reflexive;
 
-    /**
-     * Creates a new set of pronouns with only a display.
-     *
-     * @param display How they should be displayed both when standalone and mixed (should work as just [display] && He/[display] && She/They/[display], etc.)
-     *
-     */
-    public PronounSet(String display) {
-        this.display = display;
-        this.displaysecond = display;
+    String verb;
 
-        PronounManager manager = GaymersPronouns.getPronounManager();
-        this.subjective = manager.getDefaultPronoun("subjective");
-        this.objective = manager.getDefaultPronoun("objective");
-        this.possessiveadj = manager.getDefaultPronoun("possessiveadj");
-    }
+    boolean hidden;
 
     /**
      * Creates a new set of pronouns.
      *
      * @param display How they should be displayed when standalone (e.g. "He/Him", "She/Her", "They/Them", etc.).
-     * @param displaysecond How they should be displayed when NOT standalone (i.e. should fit: He/[here], [here]/She/They, They/[here], etc.).
+     * @param dominant How they should be displayed when NOT standalone (i.e. should fit: He/[here], [here]/She/They, They/[here], etc.).
      *
      * @param subjective The subjective pronoun (e.g. "He", "She", "It", etc.)
      * @param objective The objective pronoun (e.g. "Her", "Them", "Him", etc.)
-     * @param possessiveadj The possessive adj. pronoun (e.g. "Their", "Its", "His", etc.)
+     * @param possessive The possessive pronoun (e.g. "Their", "Its", "His", etc.)
+     * @param reflexive The reflexive pronoun (e.g. "Themselves", "Himself", "Herself", etc.)
+     * @param verb The verb associated with the pronoun (e.g. "Is", "Are", etc.)
      *
      */
-    public PronounSet(String display, String displaysecond, String subjective, String objective, String possessiveadj) {
+    public PronounSet(String display, String dominant, String subjective, String objective, String possessive, String reflexive, String verb, boolean hidden) {
         this.display = display;
-        this.displaysecond = displaysecond;
+
+        if (dominant != null) this.dominant = dominant;
+        else this.dominant = display.split("/")[0];
+
         this.subjective = subjective;
         this.objective = objective;
-        this.possessiveadj = possessiveadj;
+        this.possessive = possessive;
+        this.reflexive = reflexive;
+
+        this.verb = verb;
+
+        this.hidden = hidden;
     }
 
 
@@ -53,8 +52,8 @@ public class PronounSet {
         return display;
     }
 
-    public String getSecondaryDisplay() {
-        return displaysecond;
+    public String getDominant() {
+        return dominant;
     }
 
     public String getSubjective() {
@@ -65,8 +64,18 @@ public class PronounSet {
         return objective;
     }
 
-    public String getPossessiveAdj() {
-        return possessiveadj;
+    public String getPossessive() {
+        return possessive;
     }
+
+    public String getReflexive() {
+        return reflexive;
+    }
+
+    public String getVerb() {
+        return verb;
+    }
+
+    public boolean isHidden() { return hidden; }
 
 }

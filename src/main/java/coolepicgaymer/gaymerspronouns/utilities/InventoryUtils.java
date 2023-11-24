@@ -1,4 +1,4 @@
-package coolepicgaymer.gaymerspronouns.guis;
+package coolepicgaymer.gaymerspronouns.utilities;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;

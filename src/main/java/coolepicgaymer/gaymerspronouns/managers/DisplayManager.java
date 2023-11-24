@@ -1,10 +1,10 @@
 package coolepicgaymer.gaymerspronouns.managers;
 
+import coolepicgaymer.gaymerspronouns.utilities.GPUtils;
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class DisplayManager {
 
@@ -13,29 +13,37 @@ public class DisplayManager {
     boolean papi;
 
     boolean tablist;
-    boolean nametag;
-    boolean undernametag;
 
-    public DisplayManager(GaymersPronouns plugin, boolean papi) {
+    public DisplayManager(GaymersPronouns plugin) {
         this.plugin = plugin;
         userManager = GaymersPronouns.getUserManager();
-        this.papi = papi;
+    }
 
+    public void reload() {
+        this.papi = GPUtils.isPapiInstalled();
         tablist = plugin.getConfig().getStringList("display").contains("tablist");
-        nametag = plugin.getConfig().getStringList("display").contains("nametag");
-        undernametag = plugin.getConfig().getStringList("display").contains("undernametag");
+        updateAllDisplays();
     }
 
 
 
     public void updateDisplay(Player player) {
         if (tablist) {
-            player.setPlayerListName(replaceVariables(player, plugin.getConfig().getString("display-format.tab-list")));
+            if (papi) player.setPlayerListName(PlaceholderAPI.setPlaceholders(player, GPUtils.replaceVariables(player, plugin.getConfig().getString("display-format.tab-list"))));
+            else player.setPlayerListName(GPUtils.replaceVariables(player, plugin.getConfig().getString("display-format.tab-list")));
         }
     }
 
-    public static String replaceVariables(Player player, String string) {
-        return ChatColor.translateAlternateColorCodes('&', string.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{PRONOUNS}", userManager.getDisplayUserPronouns(player.getUniqueId().toString())));
+    public void updateAllDisplays() {
+        if (tablist) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                updateDisplay(player);
+            }
+        } else {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.setPlayerListName(null);
+            }
+        }
     }
 
 }

@@ -1,0 +1,245 @@
+no-pronouns-reminder: "&cDu har ikke sat dine pronomener. &7Klik her, for at sætte dem nu."
+fluid-reminder: "&7Dine pronomener er sat til &c%s&7. Klik her for at ændre dem, eller ignorer beskeden for at beholde dem."
+change-pronouns-hover: "&7Klik her for at ændre dine pronomener nu."
+pronouns-menu: "&7Vælg dine pronomener"
+pronoun-reminder-name: "&cSlå pronomen påmindelser %s"
+pronoun-reminder-lore:
+  - "&7Klik her, for at slå påmindelser %s."
+  - ""
+  - "&7Ved at slå dette til, bliver du mindet"
+  - "&7om dine valgte pronomener hver gang du"
+  - "&7joiner, så du hurtigt kan ændre dem."
+cancel-name: "&cAnnuller"
+cancel-lore:
+  - "&7Klik her, for at annullere."
+previous-page-name: "&cTidligere side"
+next-page-name: "&cNæste side"
+toggle-fluid-reminders: "&7Pronomen påmindelser er blevet slået %s."
+pronouns-set: "&7Dine pronomener er blevet sat til &c%s&7. Du kan altid ændre dem med &f/pronouns&7."
+pick-above: "&cVælg dine pronomener ovenover"
+initialize-multiple-name: "&cVælg flere"
+initialize-multiple-lore:
+  - "&7Klik her, for at vælge flere pronomener."
+not-enough-multiple-name: "&cIkke nok..."
+not-enough-multiple-lore:
+  - "&7Du skal vælge mindst én, for at fortsætte."
+confirm-multiple-name: "&cBekræft"
+confirm-multiple-lore:
+  - "&cKlik her, for at bekræfte dit valg af pronomener."
+max-pronouns-reached: "&7Undskyld, men du kan ikke vælge mere end %s pronomener."
+pronoun-chat-hover:
+  - "&fDenne spillers pronomener er %s."
+player-not-online: "&cDenne spiller er ikke online lige nu."
+pronouns-other: "&7Pronomener for &f%s&7 er &f%s&7."
+info-item-name: "&cHvad er pronomener?"
+info-item-lore:
+  - "&7Pronomener er hvad andre bruger for at referere"
+  - "&7til dig i tredjeperson."
+  - ""
+  - "&7Her er nogle eksempler:"
+  - "&8- &7&nHan&7 er meget sød. Jeg kan godt lide &nham&7."
+  - "&8- &7&nHun&7 er den bedste! Der er intet dårligt om &nhende&7."
+  - "&8- &7&nDe&7 gav mig en gave. Meget betænksomt af &ndem&7."
+  - ""
+  - "&7Hvordan vil du gerne refereres til?"
+  - ""
+  - "&7Note: Du kan vælge flere ved at klikke herunder."
+misc:
+  enabled: "til"
+  disabled: "fra"
+  enable: "til"
+  disable: "fra"
+
+
+
+# ---------- Admin kommandoer ----------
+#
+# Hvis du manuelt oversætter denne fil behøver du ikke gå længere ned, medmindre du også vil oversætte kontrolpanelet for admins.
+#
+# ------------------------------------
+
+console:
+  reload: "Genindlæser plugin filer... (Initieret af %s, tog %s ms)"
+  assigned-new: "%s gav pronomenerne %s til %s."
+  assigned-changed: "%s gav pronomenerne %s til %s (Tidligere %s)."
+  unassigned: "%s fjernede pronomener fra %s (Tidligere %s)."
+  picked-new: "Egne pronomener ændret af %s til %s."
+  picked-changed: "Egne pronomener ændret af %s til %s (Tidligere %s)."
+  fluid-reminders-toggled: "Egne fluid-påmindelser slået %s af %s."
+  invalid-file: "Invalid eller gammel %s. Laver en ny og genindlæser..."
+  language-files-reset: "For at skifte sprog er messages.yml og pronouns.yml blevet regenereret. I tilfælde af, at du havde brug for de eksisterende filer, er de stadig i plugin-mappen."
+  changed-config: "Konfigurationsværdi %s ændret af %s fra \"%s\" til \"%s\"."
+  edited-pronouns: "Pronomener med ID %s ændret af %s (%s -> %s)."
+  created-pronouns: "Pronomener med ID %s tilføjet af %s (%s)."
+  deleted-pronouns: "Pronomener med ID %s slettet af %s (%s)."
+  pronoun-format: "%s/%s/%s/%s, %s"
+assignments:
+  assigned-new: "&7Gav pronomenerne &f%s&7 til &f%s&7."
+  assigned-changed: "&7Gav pronomenerne &f%s&7 til &f%s&7 (Tidligere &f%s&7)."
+  unassigned: "&7Fjernede pronomener for &f%s&7 (Tidligere &f%s&7)."
+  no-assigned-pronouns: "&f%s&7 har ikke valgt nogen pronomener."
+  unrecognized-pronouns: "&7Ukendte pronomener: &f\"%s\""
+  name-required: "&7Du skal skrive et brugernavn."
+  pronouns-required: "&7Du skal skrive hvilke pronomener du vil give spilleren."
+configuration:
+  reload: "&aGenindlæste GaymersPronouns filer. &7(Tog %s ms)"
+  no-permission: "&cDu har ikke adgang til denne kommando."
+  other:
+    no-value: "&7Du skal skrive hvilken værdi du vil ændre."
+    invalid-value: "&7Dette er ikke en valid værdi du kan ændre."
+    not-a-number: "&7Denne værdi skal være et tal."
+    not-a-boolean: "&7Denne værdi skal være &ftrue&7 eller &ffalse&7."
+    not-a-language: "&7Dette sprog er ikke tilgængeligt."
+    changed-value: "&7Ændrede værdien &f%s&7 fra &f%s&7 til &f%s&7."
+    language-files-reset: "&cDine sprog- og pronomen-filer er blevet nulstillet, for at skifte sprog. I tilfænde af, at du havde lavet ændringer til dem, er de stadig i plugin-mappen."
+  toggles:
+    chatformat: "&7Chat format er &fslået %s&7 som en aktiv display type."
+    chathover: "&7Chat hovering er &fslået %s&7 som en aktiv display type."
+    tablist: "&7Tablist er &fslået %s&7 som en aktiv display type."
+    randomize-pronouns: "&7Tilfældigt valg af pronomener i placeholders er nu &fslået %s&7."
+    requires-reload: "&fNote: &7Genindlæs filerne med &f/gp reload&7 eller genstart, for at se ændringer."
+  display-changes:
+    must-contain-username: "&cDu skal inkludere et brugernavn eller display navn. &7Du kan gøre det med &f{USERNAME}&7 eller &f{DISPLAYNAME}&7. Notér, at det skal være med store bogstaver."
+    example-unavailable: "&7Utilgængeligt fra konsollen."
+    format-disabled: "&7Note: &fDenne format type er slået fra."
+    chatformat:
+      - "&aÆndrede chat format."
+      - "&7Eksempel: &f%s"
+    chathover:
+      - "&aÆndrede hover format."
+      - "&7Eksempel: &f%s"
+    tablist:
+      - "&aÆndrede tablist format."
+      - "&7Eksempel: &f%s"
+  instructions:
+    chatformat:
+      - "&cHvordan man ændrer chat format"
+      - "&7Skriv hvad der skal stå, når folk skriver i chatten. Der er nogle ting du kan skrive der vil blive erstattet af variabler såsom navne eller pronomener."
+      - "&fListe af variabler (skal være store bogstaver):"
+      - "&8- &f{USERNAME}&8: &7Kun spillerens navn."
+      - "&8- &f{DISPLAYNAME}&8: &7Spillerens display navn (i.e. inklusiv prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Spillerens valgte pronomener. Viser %s hvis ikke valgt."
+      - "&8- &f{MESSAGE}&8: &7Chat besked (tilføjet automatisk i slutningen hvis ikke til stede)."
+      - "&8- &fAlle PlaceholderAPI placeholders &7(hvis installeret)."
+      - "&7Note: &fEnten brugernavn eller display navn er påkrævet."
+    chathover:
+      - "&cHvordan man ændrer hover format"
+      - "&7Skriv hvad der skal stå, når man flytter musen over nogens navn eller chatbesked. Der er nogle ting du kan skrive der vil blive erstattet af variabler såsom navne eller pronomener."
+      - "&fListe af variabler (skal være store bogstaver):"
+      - "&8- &f{USERNAME}&8: &7Kun spillerens navn."
+      - "&8- &f{DISPLAYNAME}&8: &7Spillerens display navn (i.e. inklusiv prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Spillerens valgte pronomener. Viser %s hvis ikke valgt."
+      - "&8- &fAlle PlaceholderAPI placeholders &7(hvis installeret)."
+    tablist:
+      - "&cHow to edit the tablist format"
+      - "&7Skriv hvordan et navn skal stå i tab-listen. Der er nogle ting du kan skrive der vil blive erstattet af variabler såsom navne eller pronomener."
+      - "&fListe af variabler (skal være store bogstaver):"
+      - "&8- &f{USERNAME}&8: &7Kun spillerens navn."
+      - "&8- &f{DISPLAYNAME}&8: &7Spillerens display navn (i.e. inklusiv prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Spillerens valgte pronomener. Viser %s hvis ikke valgt."
+      - "&8- &fAlle PlaceholderAPI placeholders &7(hvis installeret)."
+      - "&7Note: &fEnten brugernavn eller display navn er påkrævet."
+    format-editor:
+      - "&cHvordan man ændrer format"
+      - "&7Du kan redigere en display format for chat, chat hovering, eller tab-listen med denne kommando. For yderligere instruktioner, specificer hvilken type du vil redigere:"
+      - "&8- &f/%s chat &7<tekst>&8: &fRediger chat display format (når slået til)."
+      - "&8- &f/%s hover &7<tekst>&8: &fRediger chat hovering display format (når slået til)."
+      - "&8- &f/%s tablist &7<tekst>&8: &fRediger tab-listens display format (når slået til)."
+    papi:
+      - "&cHvordan man bruger PlaceholderAPI"
+      - "&7Du kan bruge PlaceholderAPI for at vise en spillers valgte sæt af pronomener eller for at få en specifik pronomen for at referere til den i en given kontekst."
+      - ""
+      - "&cListe af placeholders:"
+      - "&8- &f%GaymersPronouns_pronouns%&8: &7Valgte pronomener."
+      - "&8- &f%GaymersPronouns_subjective%&8: &7Nominativ (f.eks. De)."
+      - "&8- &f%GaymersPronouns_objective%&8: &7Akkusativ (f.eks. Dem)."
+      - "&8- &f%GaymersPronouns_possessive%&8: &7Genetiv (f.eks. Deres)."
+      - "&8- &f%GaymersPronouns_reflexive%&8: &7Refleksiv (f.eks. Sig)."
+      - "&8- &f%GaymersPronouns_verb%&8: &7Verbum (irrelevant på dansk; altid \"er\")."
+      - "&7Gør det første bogstav stort, for at gøre det samme ved resultatet (f.eks. %GaymersPronouns_Subjective% -> De, %GaymersPronouns_subjective% -> de)"
+    papi-not-installed:
+      - ""
+      - "&7Note: &cPlaceholderAPI er ikke installeret."
+  gui:
+    name: "&8Konfigurer GaymersPronouns"
+    pronouns:
+      enter: "&cPronomen indstillinger"
+      enter-lore:
+        - "&7Klik her, for at ændre pronomen indstillinger."
+        - ""
+        - "&7Opsumering:"
+        - "&8- &7Maksimum pronomener&8: &f%s"
+        - "&8- &7Standard pronomener&8: &f%s&8/&f%s&8/&f%s&8/&f%s &7(%s)"
+        - "&8- &7Pronomen liste&8: &fKlik for info"
+        - "&8- &7Spørg på første join&8: &fSlået %s"
+        - "&8- &7Mind om uvalgte pronomener&8: &fSlået %s"
+    display:
+      enter: "&cDisplay indstillinger"
+      enter-lore: ["&7Se herunder for display indstillinger."]
+      chatformat: "&cChat-beskeder"
+      chatformat-lore:
+        - "&7Status: &fSlået %s"
+        - ""
+        - "&7Nuværende format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Venstreklik for at slå %s."
+        - "&7Højreklik for information om, hvordan du ændrer format."
+      chathover: "&cChat Hovering"
+      chathover-lore:
+        - "&7Status: &fSlået %s"
+        - ""
+        - "&7Nuværende format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Venstreklik for at slå %s."
+        - "&7Højreklik for information om, hvordan du ændrer format."
+      tablist: "&cTablist"
+      tablist-lore:
+        - "&7Status: &fSlået %s"
+        - ""
+        - "&7Nuværende format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Venstreklik for at slå %s."
+        - "&7Højreklik for information om, hvordan du ændrer format."
+    placeholderapi:
+      installed: "&cHvordan man bruger PlaceholderAPI"
+      installed-lore:
+        - "&7Du kan bruge PlaceholderAPI, for at"
+        - "&7vise specifikke pronomener, eller de"
+        - "&7valgte pronomener for en spiller."
+        - ""
+        - "&7Klik her for en liste af placeholders."
+      not-installed: "&cPlaceholderAPI"
+      not-installed-lore:
+        - "&7Ikke installeret. Klik for mere info."
+      randomize-priority: "&cTilfældig prioritering af pronomener"
+      randomize-priority-lore:
+        - "&7Vælg om placeholders skal vælge pronomener"
+        - "&7tilfældigt fra listen af dem som spilleren"
+        - "&7har valgt, eller om de altid skal bruge"
+        - "&7den første fra listen."
+        - ""
+        - "&7Status: &fSlået %s&7."
+        - ""
+        - "&7Klik her, for at slå det %s."
+  misc:
+    generic-message: "Hej"
+    true: "til"
+    false: "fra"
+  help: "Her er noget hjælp med kommandoer:"
+  help-assign:
+    - "&8- &7/%s &fassign &8- &fSæt en anden spillers pronomener."
+    - "&8- &7/%s &funassign &8- &fFjern en anden spillers valg af pronomener."
+  help-reload: "&8- &7/%s &freload &8- &fGenindlæs plugin filerne."
+  help-configure:
+    - "&8- &7/%s &fconfigure &8- &fÅbn konfigurationsmenuen."
+    - "&8- &7/%s &fset &8- &fSæt en specifik værdi i konfigurationen."
+    - "&8- &7/%s &fpronouns &8- &fTilføj, fjern eller rediger listen af pronomener."
+    - "&8- &7/%s &fformat &8- &fÆndr display format (hvis slået til)."
+    - "&8- &7/%s &fpapi &8- &fInformation om brug af PlaceholderAPI (hvis installeret)."
+  players-only: "Dette kan kun gøres af in-game spillere."

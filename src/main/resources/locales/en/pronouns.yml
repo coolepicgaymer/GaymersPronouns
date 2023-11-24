@@ -1,0 +1,116 @@
+#
+# This is what will be displayed when someone has not set their pronouns.
+#
+undefined-pronouns: "Not set"
+
+# ---------------------------------------- #
+#
+# How do I add more pronouns?
+#
+# You can add more pronouns simply by doing some copy pasting or editing the existing ones.
+#
+# You can also easily make new ones in-game using the "/gp pronouns" command if you find this overwhelming.
+#
+#
+#
+# Here's the format:
+#                               This is the pronoun ID. It's not visible to players in-game and is only used for saving purposes. This also
+#                               means that if you were to edit or swap around these numbers below, that players with those pronouns would get
+#  1:                       <-- different pronouns assigned to them, so don't do that. Note that the pronouns are shown in the order of
+#                               their IDs from low to high. Positive numbers are shown on the left side of the pronoun picker, and negative
+#                               numbers on the right side. Do not use 0 as it is reserved.
+#
+#   hidden: false           <-- Whether you want to hide it from the picker menu for some reason. It can still be manually assigned by admins.
+#
+#   display: "They/Them"    <-- This is how it's displayed when it's the only picked pronouns of a player. This is the only required attribute.
+#
+#   dominant: "They"        <-- This is the dominant pronoun used when it's in a set of multiple pronouns (e.g. She/They). If not specified, the first
+#                               part of the display attribute will be used (in this case, "They", which would make this redundant, hence its rare use).
+#
+#   subjective: "They"      <-- The subjective pronoun. (e.g. He, She, They)
+#   objective: "Them"       <-- The objective pronoun. (e.g. Him, Her, Them)
+#   possessive: "Their"     <-- The possessive pronoun. (e.g. His, Her, Their)
+#   reflexive: "Themselves" <-- The reflexive pronoun. (e.g. Himself, Herself, Themselves)
+#
+#   verb: "Are"             <-- The verb associated with the pronoun (e.g. "Is", "Are" to be used in placeholders like "He *is*", "They *are*").
+#
+#
+#
+#   This seems like a lot. But if you don't use PlaceholderAPI (which most probably don't), you only really need the ID and the display.
+#   In some cases the 'dominant' is also useful when the first pronoun in the x/y format isn't the one you want displayed when multiple sets are shown together.
+#   Hiding pronouns may be useful if a set of pronouns is being abused somehow (can still be assigned with /gp assign).
+#
+# ---------------------------------------- #
+
+pronouns:
+
+  #
+  # Negative numbers will be shown separately from 1 and above (on the right side of the menu).
+  #
+  -1:
+    display: "Any"
+  -2:
+    display: "Ask"
+  -3:
+    display: "None"
+    subjective: "This player"
+    objective: "That player"
+    possessive: "This player's"
+    reflexive: "The player"
+    verb: "Is"
+
+  #
+  #  These will be shown on the left side of the menu.
+  #
+  1:
+    display: "He/Him"
+    subjective: "He"
+    objective: "Him"
+    possessive: "His"
+    reflexive: "Himself"
+    verb: "Is"
+  2:
+    display: "She/Her"
+    subjective: "She"
+    objective: "Her"
+    possessive: "Her"
+    reflexive: "Herself"
+    verb: "Is"
+  3:
+    display: "They/Them"
+    subjective: "They"
+    objective: "Them"
+    possessive: "Their"
+    reflexive: "Themselves"
+    verb: "Are"
+  4:
+    display: "It/Its"
+    subjective: "It"
+    objective: "It"
+    possessive: "Its"
+    reflexive: "Itself"
+    verb: "Is"
+
+  # There's not any deep reason for skipping 5 here. It's just because some languages have more pronouns so you can change between them without messing up your players' saved pronouns or having a weird order of displaying them in.
+
+  6:
+    display: "Xe/Xem"
+    subjective: "Xe"
+    objective: "Xem"
+    possessive: "Xyr"
+    reflexive: "Xemself"
+    verb: "Is"
+  7:
+    display: "Ze/Zir"
+    subjective: "Ze"
+    objective: "Zir"
+    possessive: "Zirs"
+    reflexive: "Zirself"
+    verb: "Is"
+  8:
+    display: "Ey/Em"
+    subjective: "Ey"
+    objective: "Em"
+    possessive: "Eirs"
+    reflexive: "Emself"
+    verb: "Is"

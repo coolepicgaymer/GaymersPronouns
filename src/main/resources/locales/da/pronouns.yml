@@ -1,0 +1,119 @@
+#
+# Dette er hvad der vil blive vist, hvis en spiller ikke har valgt sine pronomener.
+#
+undefined-pronouns: "Ikke sat"
+
+# ---------------------------------------- #
+#
+# Hvordan tilføjer jeg flere pronomener?
+#
+# Du kan tilføje flere pronomener med lidt kopiering, eller ved at ændre de eksisterende pronomener nedenunder.
+#
+# Du kan også nemt lave dem in-game ved brug af "/gp pronouns" kommandoen, hvis det her er for overvældende.
+#
+#
+#
+# Her er hvordan man gør:
+#                               Dette er pronoun ID'et. Det bliver ikke vist til spillere og er kun brugt for af tekniske årsager. Det betyder
+#                               også, at hvis du ændrer på tal eller bytter rundt på dem, vil spillere der allerede havde valgt pronomener med
+#  1:                       <-- det ID vil få deres eksisterende valg ændret. Så lad være med det. De bliver vist fra laveste til højeste tal i
+#                               i stedet for den rækkefølge de står heri. Positive tal bliver vist i venstre side af menuen når man vælger pronomener,
+#                               mens negative tal vises i højre side.
+#
+#   hidden: true            <-- Hvorvidt du vil skjule disse pronomener fra spilleres menuer. Det kan stadig blive tildelt af admins.
+#
+#   display: "De/Dem"       <-- Dette er hvordan det bliver vist, når det er de eneste pronomener valgt af en spiller. Dette er det eneste der faktisk er et krav.
+#
+#   dominant: "Dem"         <-- Dette er det dominante pronomen, som bliver brugt når mere end ét er valgt (f.eks. Han/Hun). Hvis ikke specificeret, bliver
+#                               den første del af "display" brugt (i dette tilfælde, "Dem").
+#
+#   subjective: "De"        <-- Det nominative pronomen. (f.eks. Han, Hun, De)
+#   objective: "Dem"        <-- Det akkusative pronomen. (f.eks. Ham, Hende, Dem)
+#   possessive: "Deres"     <-- Det genetive pronomen. (f.eks. Hans, Hendes, Deres)
+#   reflexive: "Dem selv"   <-- Det refleksive pronomen. (f.eks. Sig selv, Dem selv)
+#
+#   verb: "Er"              <-- Verbet associeret med pronomenet (på dansk er det altid "er", så du kan godt ignorere den).
+#
+#
+#
+#   Det her virker som en del. Men hvis du ikke bruger PlaceholderAPI, har du kun brug for ID'et og "display". I nogle tilfælde "dominant" eller "hidden" hvis du vil skjule dem.
+#
+# ---------------------------------------- #
+
+pronouns:
+
+  #
+  # Negative tal vil blive vist separat fra 1 og derover (på den højre side af menuen).
+  #
+  -1:
+    display: "Alle"
+  -2:
+    display: "Spørg"
+  -3:
+    display: "Ingen"
+    subjective: "Denne spiller"
+    objective: "Den spiller"
+    possessive: "Denne spillers"
+    reflexive: "Sig selv"
+    verb: "Er"
+
+  #
+  # Dette vil blive vist på den venstre side af menuen.
+  #
+  1:
+    display: "Han/Ham"
+    subjective: "Han"
+    objective: "Ham"
+    possessive: "Hans"
+    reflexive: "Sig selv"
+    verb: "Er"
+  2:
+    display: "Hun/Hende"
+    subjective: "Hun"
+    objective: "Hende"
+    possessive: "Hendes"
+    reflexive: "Sig selv"
+    verb: "Er"
+  3:
+    display: "De/Dem"
+    dominant: "Dem"
+    subjective: "De"
+    objective: "Dem"
+    possessive: "Deres"
+    reflexive: "Dem selv"
+    verb: "Er"
+  4:
+    display: "Den/Dens"
+    subjective: "Den"
+    objective: "Den"
+    possessive: "Dens"
+    reflexive: "Sig selv"
+    verb: "Er"
+  5:
+    display: "Det/Dets"
+    subjective: "Det"
+    objective: "Det"
+    possessive: "Dets"
+    reflexive: "Sig selv"
+    verb: "Er"
+  6:
+    display: "Xe/Xem"
+    subjective: "Xe"
+    objective: "Xem"
+    possessive: "Xyr"
+    reflexive: "Sig selv"
+    verb: "Er"
+  7:
+    display: "Ze/Zir"
+    subjective: "Ze"
+    objective: "Zir"
+    possessive: "Zirs"
+    reflexive: "Sig selv"
+    verb: "Er"
+  8:
+    display: "Ey/Em"
+    subjective: "Ey"
+    objective: "Em"
+    possessive: "Eirs"
+    reflexive: "Sig selv"
+    verb: "Er"

@@ -1,0 +1,245 @@
+version: 1 # Do NOT change this unless you know what you're doing or have been specifically instructed to do so
+
+no-pronouns-reminder: "&cYou don't have any pronouns set. &7Click here to set them now."
+fluid-reminder: "&7Your pronouns are currently set to &c%s&7. Click here to change them, or ignore this to keep them."
+change-pronouns-hover: "&7Click here to change your pronouns now."
+pronouns-menu: "&7Pick your pronouns"
+pronoun-reminder-name: "&cToggle Pronoun Reminder"
+pronoun-reminder-lore:
+  - "&7Click here to %s pronoun reminders."
+  - ""
+  - "&7Enabling this will remind you what your"
+  - "&7current pronouns are, every time you join, so"
+  - "&7you can quickly change them."
+cancel-name: "&cCancel"
+cancel-lore:
+  - "&7Click here to cancel."
+previous-page-name: "&cPrevious Page"
+next-page-name: "&cNext Page"
+toggle-fluid-reminders: "&7Pronoun reminders have now been %s."
+pronouns-set: "&7Your pronouns have been set to &c%s&7. You can change them at any time with &f/pronouns&7."
+pick-above: "&cPick your pronouns above"
+initialize-multiple-name: "&cPick Multiple"
+initialize-multiple-lore:
+  - "&7Click here to pick multiple pronouns."
+not-enough-multiple-name: "&cNot enough..."
+not-enough-multiple-lore:
+  - "&7You must pick at least one to continue."
+confirm-multiple-name: "&cConfirm"
+confirm-multiple-lore:
+  - "&7Click here to confirm your pick of pronouns."
+max-pronouns-reached: "&7Sorry, but you can't pick more than %s pronouns."
+pronoun-chat-hover:
+  - "&fThis player's pronouns are %s."
+player-not-online: "&cThis player is not online right now."
+pronouns-other: "&7Pronouns of &f%s&7 are &f%s&7."
+info-item-name: "&cWhat are pronouns?"
+info-item-lore:
+  - "&7Pronouns are what people use to refer to you"
+  - "&7in third person."
+  - ""
+  - "&7Here are some examples:"
+  - "&8- &7&nHe&7 is very cool. I like &nhim&7."
+  - "&8- &7&nShe&7 is the best! There's nothing bad about &nher&7."
+  - "&8- &7&nThey&7 gave me a gift. Very thoughtful of &nthem&7."
+  - ""
+  - "&7How would you like to be referred to?"
+  - ""
+  - "&7Note: You can pick multiple by clicking below."
+misc:
+  enabled: "enabled"
+  disabled: "disabled"
+  enable: "enable"
+  disable: "disable"
+
+
+
+# ---------- Admin commands ----------
+#
+# If you're translating this manually, you won't need to edit further unless you want to translate the admin control panel, too.
+#
+# ------------------------------------
+
+console:
+  reload: "Reloading the plugin... (Initiated by %s, took %s ms)"
+  assigned-new: "%s assigned the pronouns %s for %s."
+  assigned-changed: "%s assigned the pronouns %s for %s (Previously %s)."
+  unassigned: "%s unassigned pronouns of %s (Previously %s)."
+  picked-new: "Own pronouns changed by %s to %s."
+  picked-changed: "Own pronouns changed by %s to %s (Previously %s)."
+  fluid-reminders-toggled: "Own fluid reminders %s by %s."
+  invalid-file: "Invalid or outdated %s. Generating a new one and reloading..."
+  language-files-reset: "In order to switch languages, messages.yml and pronouns.yml have been reset. In case you made edits to them, they are still in the plugin folder."
+  changed-config: "Config value %s changed by %s from \"%s\" to \"%s\"."
+  edited-pronouns: "Pronouns with ID %s changed by %s (%s -> %s)."
+  created-pronouns: "Pronouns with ID %s created by %s (%s)."
+  deleted-pronouns: "Pronouns with ID %s deleted by %s (%s)."
+  pronoun-format: "%s/%s/%s/%s, %s"
+assignments:
+  assigned-new: "&7Assigned the pronouns &f%s&7 for &f%s&7."
+  assigned-changed: "&7Assigned the pronouns &f%s&7 for &f%s&7 (Previously &f%s&7)."
+  unassigned: "&7Unassigned pronouns of &f%s&7 (Previously &f%s&7)."
+  no-assigned-pronouns: "&f%s&7 does not have any assigned pronouns."
+  unrecognized-pronouns: "&7Unrecognized pronouns: &f\"%s\""
+  name-required: "&7You must specify a username."
+  pronouns-required: "&7You must specify which pronouns to assign."
+configuration:
+  reload: "&aReloaded GaymersPronouns. &7(Took %s ms)"
+  no-permission: "&cInsufficient permission."
+  other:
+    no-value: "&7You must type a value you want to edit."
+    invalid-value: "&7This is not a valid value to edit."
+    not-a-number: "&7This value must be a number."
+    not-a-boolean: "&7This value must be &ftrue&7 or &ffalse&7."
+    not-a-language: "&7This language is not available."
+    changed-value: "&7Changed the value &f%s&7 from &f%s&7 to &f%s&7."
+    language-files-reset: "&cYour language and pronoun configuration files have been reset to change languages. In case you made edits to them, they are still in the plugin folder."
+  toggles:
+    chatformat: "&7Chat format is &f%s&7 as an active display type."
+    chathover: "&7Chat hovering is &f%s&7 as an active display type."
+    tablist: "&7Tablist is &f%s&7 as an active display type."
+    randomize-pronouns: "&7Randomizing pronoun priorities in placeholders is now &f%s&7."
+    requires-reload: "&fNote: &7Reload with &f/gp reload&7 or restart to see changes."
+  display-changes:
+    must-contain-username: "&cYou must include a username or display name. &7You can do this with &f{USERNAME}&7 or &f{DISPLAYNAME}&7 respectively. Note that they must be capitalised."
+    example-unavailable: "&7Unavailable from console."
+    format-disabled: "&7Note: &fThis format type is currently disabled."
+    chatformat:
+      - "&aSuccessfully changed the chat format."
+      - "&7Example: &f%s"
+    chathover:
+      - "&aSuccessfully changed the hover format."
+      - "&7Example: &f%s"
+    tablist:
+      - "&aSuccessfully changed the tablist format."
+      - "&7Example: &f%s"
+  instructions:
+    chatformat:
+      - "&cHow to edit the chat format"
+      - "&7Type what you what you want it to say when people speak in chat. There are certain things you can type that will be replaced with variables such as names or pronouns."
+      - "&fList of variables (must be capitalized):"
+      - "&8- &f{USERNAME}&8: &7Just the player's name."
+      - "&8- &f{DISPLAYNAME}&8: &7Player's display name (i.e. including prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Player's picked pronouns. Displays %s if not specified."
+      - "&8- &f{MESSAGE}&8: &7Chat message (added automatically at the end when absent)."
+      - "&8- &fAny PlaceholderAPI placeholders &7(if installed)."
+      - "&7Note: &fEither username or display name is required."
+    chathover:
+      - "&cHow to edit the hover format"
+      - "&7Type what you what you want to display when hovering over a name or message in chat. There are certain things you can type that will be replaced with variables such as names or pronouns."
+      - "&fList of variables (must be capitalized):"
+      - "&8- &f{USERNAME}&8: &7Just the player's name."
+      - "&8- &f{DISPLAYNAME}&8: &7Player's display name (i.e. including prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Player's picked pronouns. Displays %s if not specified."
+      - "&8- &fAny PlaceholderAPI placeholders &7(if installed)."
+    tablist:
+      - "&cHow to edit the tablist format"
+      - "&7Type what you what you want the tab-list to say for each player. There are certain things you can type that will be replaced with variables such as names or pronouns."
+      - "&fList of variables (must be capitalized):"
+      - "&8- &f{USERNAME}&8: &7Just the player's name."
+      - "&8- &f{DISPLAYNAME}&8: &7Player's display name (i.e. including prefix etc.)."
+      - "&8- &f{PRONOUNS}&8: &7Player's picked pronouns. Displays %s if not specified."
+      - "&8- &fAny PlaceholderAPI placeholders &7(if installed)."
+      - "&7Note: &fEither username or display name is required."
+    format-editor:
+      - "&cHow to edit formats"
+      - "&7You can edit the display format for the chat, chat hovering, or the tab list using this command. For further instructions on each of them, specify which type you want to edit:"
+      - "&8- &f/%s format chat &7<text>&8: &fEdit the chat display format (when enabled)."
+      - "&8- &f/%s format hover &7<text>&8: &fEdit the chat hovering display format (when enabled)."
+      - "&8- &f/%s format tablist &7<text>&8: &fEdit the tablist display format (when enabled)."
+    papi:
+      - "&cHow to use PlaceholderAPI"
+      - "&7You can use PlaceholderAPI to display a player's preferred set of pronouns or get a specific type of pronoun to refer to them in a given context."
+      - ""
+      - "&cList of placeholders:"
+      - "&8- &f%GaymersPronouns_pronouns%&8: &7Preferred pronouns."
+      - "&8- &f%GaymersPronouns_subjective%&8: &7Subjective (e.g. They)."
+      - "&8- &f%GaymersPronouns_objective%&8: &7Objective (e.g. Them)."
+      - "&8- &f%GaymersPronouns_possessive%&8: &7Possessive (e.g. Their)."
+      - "&8- &f%GaymersPronouns_reflexive%&8: &7Reflexive (e.g. Themselves)."
+      - "&8- &f%GaymersPronouns_verb%&8: &7Verb (e.g. Are)."
+      - "&7Note: &fCapitalize the first letter to capitalize the result (e.g. %GaymersPronouns_Subjective% -> They, %GaymersPronouns_subjective% -> they)"
+    papi-not-installed:
+      - ""
+      - "&7Note: &cPlaceholderAPI is not installed."
+  gui:
+    name: "&8Configure GaymersPronouns"
+    pronouns:
+      enter: "&cPronoun Settings"
+      enter-lore:
+        - "&7Summary:"
+        - "&8- &7Max Pronouns&8: &f%s"
+        - "&8- &7Default Pronouns&8: &f%s&8/&f%s&8/&f%s&8/&f%s &7(%s)"
+        - "&8- &7Pronouns List&8: &fClick for info"
+        - "&8- &7Prompt on First Join&8: &f%s"
+        - "&8- &7Remind Unset Pronouns&8: &f%s"
+    display:
+      enter: "&cDisplay Settings"
+      enter-lore: ["&7See below for display settings."]
+      chatformat: "&cChat Messages"
+      chatformat-lore:
+        - "&7Enabled: &f%s"
+        - ""
+        - "&7Current Format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Left click to toggle."
+        - "&7Right click for info on how to change the format."
+      chathover: "&cChat Hovering"
+      chathover-lore:
+        - "&7Enabled: &f%s"
+        - ""
+        - "&7Current Format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Left click to toggle."
+        - "&7Right click for info on how to change the format."
+      tablist: "&cTablist"
+      tablist-lore:
+        - "&7Enabled: &f%s"
+        - ""
+        - "&7Current Format:"
+        - ""
+        - "&f%s"
+        - ""
+        - "&7Left click to toggle."
+        - "&7Right click for info on how to change the format."
+    placeholderapi:
+      installed: "&cHow to use PlaceholderAPI"
+      installed-lore:
+        - "&7Optionally, you can use PlaceholderAPI to"
+        - "&7display either specific pronouns, or the set of"
+        - "&7preferred pronouns for a player."
+        - ""
+        - "&7Click here for a list of placeholders."
+      not-installed: "&cPlaceholderAPI"
+      not-installed-lore:
+        - "&7Not installed. Click for more info."
+      randomize-priority: "&cRandomize Pronoun Priority"
+      randomize-priority-lore:
+        - "&7Choose whether you want to pick a random set"
+        - "&7of preferred pronouns for a player when using"
+        - "&7placeholders or if it should always use the"
+        - "&7top priority with no variation."
+        - ""
+        - "&7Currently %s&7."
+        - ""
+        - "&7Click here to toggle."
+  misc:
+    generic-message: "Hello"
+    true: "&aYes"
+    false: "&cNo"
+  help: "&cHere's some help with commands:"
+  help-assign:
+    - "&8- &7/%s &fassign &8- &fAssign or change someone else's pronouns."
+    - "&8- &7/%s &funassign &8- &fUnassign pronouns for a player."
+  help-reload: "&8- &7/%s &freload &8- &fReload the plugin."
+  help-configure:
+    - "&8- &7/%s &fconfigure &8- &fOpen the configuration menu."
+    - "&8- &7/%s &fset &8- &fSet a specific configuration value."
+    - "&8- &7/%s &fpronouns &8- &fAdd, remove, or edit pronouns."
+    - "&8- &7/%s &fformat &8- &fChange display formats (if enabled)."
+    - "&8- &7/%s &fpapi &8- &fInfo on how to use PlaceholderAPI (if installed)."
+  players-only: "This can only be done by in-game players."

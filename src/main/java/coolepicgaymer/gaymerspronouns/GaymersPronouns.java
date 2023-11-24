@@ -1,10 +1,14 @@
 package coolepicgaymer.gaymerspronouns;
 
+import coolepicgaymer.gaymerspronouns.commands.AdminCommand;
 import coolepicgaymer.gaymerspronouns.commands.MainPronounCommand;
+import coolepicgaymer.gaymerspronouns.guis.ConfigurationMenu;
+import coolepicgaymer.gaymerspronouns.guis.PronounsMenu;
 import coolepicgaymer.gaymerspronouns.listeners.InventoryEvents;
 import coolepicgaymer.gaymerspronouns.listeners.PlayerChat;
 import coolepicgaymer.gaymerspronouns.listeners.PlayerJoin;
 import coolepicgaymer.gaymerspronouns.managers.*;
+import coolepicgaymer.gaymerspronouns.utilities.GPUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,24 +19,35 @@ public final class GaymersPronouns extends JavaPlugin {
     private static ConfigManager configManager;
     private static DisplayManager displayManager;
     private static MessageManager messageManager;
+    private ConfigurationMenu configMenu;
+    private PlaceholderManager placeholderManager;
+
+    private static PlayerChat playerChat;
+    private static AdminCommand adminCommand;
+    private PlayerJoin playerJoin;
 
     @Override
     public void onEnable() {
-        boolean papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
         configManager = new ConfigManager(this);
         pronounManager = new PronounManager(this);
         userManager = new UserManager(this);
+        configMenu = new ConfigurationMenu(this);
         messageManager = new MessageManager(this);
-        displayManager = new DisplayManager(this, papi);
-        if (papi) new PlaceholderManager(this).register();
+        displayManager = new DisplayManager(this);
 
-        Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
-        Bukkit.getPluginManager().registerEvents(new InventoryEvents(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerChat(this), this);
+        Bukkit.getPluginManager().registerEvents((playerJoin = new PlayerJoin(this)), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryEvents(configMenu), this);
+        Bukkit.getPluginManager().registerEvents((playerChat = new PlayerChat(this)), this);
+
+        new GPUtils(this);
 
         new MainPronounCommand(this);
+        adminCommand = new AdminCommand(this, configMenu);
+
+        if (GPUtils.isPapiInstalled()) (placeholderManager = new PlaceholderManager(this)).register();
 
         reload();
+
     }
 
 
@@ -43,16 +58,29 @@ public final class GaymersPronouns extends JavaPlugin {
     }
 
     /**
-     * Reloads the config and all pronouns (not users.yml).
+     * Reloads the config, messages and all pronouns (not users.yml).
      */
     public void reload() {
         saveDefaultConfig();
         reloadConfig();
 
-        pronounManager.reloadDefaults();
-        pronounManager.reloadPronouns();
+        configManager.reload();
+
+        pronounManager.reload();
 
         messageManager.reloadMessages();
+
+        playerChat.reload();
+        playerJoin.reload();
+        displayManager.reload();
+        userManager.reload();
+        configMenu.reload();
+
+        adminCommand.reload();
+
+        if (GPUtils.isPapiInstalled()) placeholderManager.reload();
+
+        PronounsMenu.reload(getConfig().getBoolean("show-tutorial-item"), getConfig().getBoolean("log-pronoun-changes"), getLogger());
     }
 
     public static UserManager getUserManager() {
@@ -69,10 +97,6 @@ public final class GaymersPronouns extends JavaPlugin {
 
     public static ConfigManager getConfigManager() {
         return configManager;
-    }
-
-    public static String getPronouns(String uuid) {
-        return userManager.getDisplayUserPronouns(uuid);
     }
 
 }

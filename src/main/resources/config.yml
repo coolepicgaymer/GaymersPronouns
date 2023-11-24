@@ -6,21 +6,75 @@
 #
 #------------------------------------------------------------------#
 # I've tried my best to explain everything as you go, using these comments.
-# (Can be used with PlaceholderAPI: %GaymersPronouns_pronouns%)
+# (Can be used with PlaceholderAPI: %GaymersPronouns_pronouns% and others. Get more info with /gp papi.)
 
 #
-# These are the default pronouns.
+# Which language you want to use. Currently available: EN (english) or DA (danish)
+# Keep in mind, you can also modify the messages.yml yourself.
+# It may seem large, but only the top half is necessary. The bottom half is only visible to admins and the console (which you probably aren't doing since you're reading this).
+#
+# Note: You may want to reset the pronouns.yml and messages.yml and generate new ones in the new language.
+# This can be done by deleting or renaming the files and reloading the plugin or restarting the server.
+# You can also reset them by changing languages in-game using /gp set language [locale].
+#
+locale: EN
+
+#
+# You can disable in-game configuration with the admin command by setting this to true.
+# It's still possible to use to command to reload the plugin and assigning pronouns.
+#
+# All config changes are logged in the config.
+#
+# Note: Experimental Mode must be enabled for in-game configuration.
+#
+disable-in-game-configuration: false
+
+#
+# Whether you want to log pronoun changes in the console.
+#
+log-pronoun-changes: false
+
+#
+# These is the default pronoun set ID. You can see IDs in-game with "/gp pronouns" or in the pronouns.yml file.
 # They will ONLY be used when absolutely needed, and when the player doesn't have pronouns set.
 #
-default-pronouns:
-  subjective: "They"
-  objective: "Them"
-  possessiveadj: "Their"
+# By default (in English):
+# They/They is 3
+# She/Her is 2
+# He/Him is 1
+#
+# Check pronouns.yml for more info.
+#
+default-pronouns: 3
+
+#
+# Whether placeholders should randomly pick which preferred pronoun set to use (true) or always use the top priority (false).
+#
+# Note: This can be mildly funky at times when using a pronoun and a verb at the same time. (e.g. %GaymersPronouns_Objective% %GaymersPronouns_verb%)
+# I've done my best to make them match in most cases, but in rare cases with the right timing, they may not match. (e.g. "He are" instead of "He is")
+#
+random-priority-in-placeholders: false
 
 #
 # This is the inclusive maximum of pronouns a player can have when picking multiple. Set to 0 for no maximum (not recommended).
 #
 max-pronouns: 3
+
+#
+# Here, you can enable whether the pronoun selection menu should pop up immediately the first time someone joins the server.
+#
+prompt-on-first-join: false
+
+#
+# Whether you want to remind your players to pick their pronouns if they aren't set every time they log in. (Can be disabled in-game per player as well, this is just the default)
+# True if you want reminders, false if you do not.
+#
+default-no-pronouns-reminder: true
+
+#
+# Whether you want to show the book with general info about pronouns in the pronoun menu for people who might not know.
+#
+show-tutorial-item: true
 
 #
 # This is where the pronouns will be displayed. Remove the hashtag in front of the ones you want.
@@ -52,7 +106,7 @@ display-format:
   # IMPORTANT:
   # - Write "{MESSAGE}" for it to be replaced with the message.
   #
-  chat-format: "&7[{PRONOUNS}] {DISPLAYNAME}&7: &f{MESSAGE}"
+  chat-format: "&7[{PRONOUNS}] &f<{DISPLAYNAME}&f> {MESSAGE}"
 
   #
   # This is how the little box will look when you hover over someone's name ONLY if chathover is enabled above.
@@ -74,5 +128,25 @@ display-format:
   # - Write "{PRONOUNS}" for it to be replaced with the player's pronouns.
   # - Write "{DISPLAYNAME}" for it to be replaced with the player's display name.
   # - Write "{USERNAME}" for it to be replaced with the player's username.
+  # - Supports PlaceholderAPI.
   #
-  tab-list: "{DISPLAYNAME} &7[{PRONOUNS}]"
+  tab-list: "&7[{PRONOUNS}] &f{USERNAME}"
+
+  #
+  # Whether you want to update the tablist names every x seconds.
+  # It will update on pronoun changes regardless. This is just for if you
+  # use PlaceholderAPI and have placeholders that need updating. If you don't
+  # have any placeholders, just leave this off and ignore it.
+  #
+  update-tablist-periodically: false
+  tablist-update-delay: 60
+
+#
+# Do NOT change this or you may lose your config.
+#
+version: 2
+
+#
+# Enable experimental features?
+#
+developer-mode: false

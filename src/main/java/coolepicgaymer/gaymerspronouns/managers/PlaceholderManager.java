@@ -8,9 +8,17 @@ import org.bukkit.OfflinePlayer;
 public class PlaceholderManager extends PlaceholderExpansion {
 
     GaymersPronouns plugin;
+    UserManager userManager;
+
+    boolean random;
 
     public PlaceholderManager(GaymersPronouns plugin) {
         this.plugin = plugin;
+        this.userManager = plugin.getUserManager();
+    }
+
+    public void reload() {
+        random = plugin.getConfig().getBoolean("random-priority-in-placeholders");
     }
 
     @Override
@@ -25,7 +33,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1.0";
+        return plugin.getDescription().getVersion();
     }
 
     @Override
@@ -35,8 +43,28 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
-        if (params.equalsIgnoreCase("pronouns")){
-            return plugin.getPronouns(player.getUniqueId().toString());
+        if (params.equalsIgnoreCase("pronouns")) {
+            return userManager.getDisplayUserPronouns(player.getUniqueId());
+        }
+        else if (params.equalsIgnoreCase("subjective")) {
+            if (!params.startsWith("S")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+        }
+        else if (params.equalsIgnoreCase("objective")) {
+            if (!params.startsWith("O")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+        }
+        else if (params.equalsIgnoreCase("possessive")) {
+            if (!params.startsWith("P")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+        }
+        else if (params.equalsIgnoreCase("reflexive")) {
+            if (!params.startsWith("R")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+        }
+        else if (params.equalsIgnoreCase("verb")) {
+            if (!params.startsWith("V")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
         }
         return null;
     }
