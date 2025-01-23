@@ -6,19 +6,32 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MessageManager {
 
     private ConfigManager configManager;
     private static FileConfiguration messages;
 
+    Logger logger;
+
+    private final int version = 2;
+
     public MessageManager(GaymersPronouns plugin) {
+        logger = plugin.getLogger();
+
         configManager = plugin.getConfigManager();
     }
 
     public void reloadMessages() {
         configManager.saveDefaultCustomConfig("messages.yml", false);
         messages = configManager.reloadCustomConfig("messages.yml");
+
+        if (!messages.isSet("version") || !messages.isInt("version") || messages.getInt("version") != version) {
+            messages = configManager.regenerateCustomConfig("messages.yml");
+
+            logger.info(getMessage("console.invalid-file", "messages.yml"));
+        }
     }
 
     public static String getMessage(String message) {
@@ -29,8 +42,8 @@ public class MessageManager {
     public static String getMessage(String message, String... replace) {
         if (!messages.isSet(message)) return message;
         String msg = messages.getString(message);
-        for (String s : replace) {
-            msg = msg.replaceFirst("%s", s);
+        for (int i = 0; i < replace.length; i++) {
+            msg = msg.replaceFirst("\\{" + i + "}", replace[i]);
         }
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
@@ -55,15 +68,15 @@ public class MessageManager {
         }
         int i = 0;
         for (String s : messages.getStringList(message)) {
-            if (i < replace.length && s.contains("%s")) {
-                while (i < replace.length && s.contains("%s")) {
+            if (i < replace.length && s.contains("{" + i + "}")) {
+                while (i < replace.length && s.contains("{" + i + "}")) {
                     if (replace[i].contains("\n")) {
                         String[] rep = replace[i].split("\n");
-                        msg.add(ChatColor.translateAlternateColorCodes('&', s.replaceFirst("%s", rep[0])));
+                        msg.add(ChatColor.translateAlternateColorCodes('&', s.replaceFirst("\\{" + i + "}", rep[0])));
                         for (int i2 = 1; i2 < rep.length; i2++) {
                             msg.add(ChatColor.translateAlternateColorCodes('&', rep[i2]));
                         }
-                    } else s = s.replaceFirst("%s", replace[i]);
+                    } else s = s.replaceFirst("\\{" + i + "}", replace[i]);
                     i++;
                 }
             }
@@ -78,10 +91,11 @@ public class MessageManager {
             msg.add(message);
             return msg;
         }
+
         for (String s : messages.getStringList(message)) {
-            if (s.contains("%s")) {
-                while (s.contains("%s")) {
-                    s = s.replaceFirst("%s", replace);
+            if (s.contains("{0}")) {
+                while (s.contains("{0}")) {
+                    s = s.replaceFirst("\\{0}", replace);
                 }
             }
             msg.add(ChatColor.translateAlternateColorCodes('&', s));

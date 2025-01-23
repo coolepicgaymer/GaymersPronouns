@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +123,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
                 case "config":
                 case "menu":
                     if (devMode && configurable && sender.hasPermission("gaymerspronouns.configure")) {
-                        if (!(sender instanceof Player)) sender.sendMessage(MessageManager.getMessage("configuration-players-only"));
+                        if (!(sender instanceof Player)) sender.sendMessage(MessageManager.getMessage("console.players-only"));
                         else ((Player) sender).openInventory(configMenu.getInventory((Player) sender));
                         return false;
                     }
@@ -263,11 +262,17 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
 
         boolean bool;
 
-        if (value.equals("true")) bool = true;
-        else if (value.equals("false")) bool = false;
-        else {
-            sender.sendMessage(MessageManager.getMessage("configuration.other.not-a-boolean"));
-            return;
+        switch (value) {
+            case "true":
+            case "yes":
+                bool = true;
+                break;
+            case "false":
+            case "no":
+                bool = false;
+            default:
+                sender.sendMessage(MessageManager.getMessage("configuration.other.not-a-boolean"));
+                return;
         }
 
         plugin.getLogger().info(MessageManager.getMessage("console.changed-config", path, sender.getName(), plugin.getConfig().getString(path), value));
