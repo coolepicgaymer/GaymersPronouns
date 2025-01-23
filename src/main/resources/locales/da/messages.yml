@@ -73,6 +73,7 @@ console:
   created-pronouns: "Pronomener med ID {0} tilføjet af {1} ({2})."
   deleted-pronouns: "Pronomener med ID {0} slettet af {1} ({2})."
   pronoun-format: "{0}/{1}/{2}/{3}, {4}"
+  players-only: "Dette kan kun gøres af in-game spillere."
 assignments:
   assigned-new: "&7Gav pronomenerne &f{0}&7 til &f{1}&7."
   assigned-changed: "&7Gav pronomenerne &f{0}&7 til &f{1}&7 (Tidligere &f{2}&7)."
@@ -242,4 +243,3 @@ configuration:
     - "&8- &7/{0} &fpronouns &8- &fTilføj, fjern eller rediger listen af pronomener."
     - "&8- &7/{0} &fformat &8- &fÆndr display format (hvis slået til)."
     - "&8- &7/{0} &fpapi &8- &fInformation om brug af PlaceholderAPI (hvis installeret)."
-  players-only: "Dette kan kun gøres af in-game spillere."
