@@ -83,6 +83,9 @@ console:
     table-creation-error: "Unable to create table in SQL database."
     player-load-error: "Could not load player {0} from SQL database. Using defaults for now."
     sql-update-error: "Failed to update data in SQL database."
+    migration-started: "A player data migration was started by {0}."
+    migration-success: "Migration of player data was successful."
+    migration-error: "Migration of player data failed."
 assignments:
   assigned-new: "&7Assigned the pronouns &f{0}&7 for &f{1}&7."
   assigned-changed: "&7Assigned the pronouns &f{0}&7 for &f{1}&7 (Previously &f{2}&7)."
@@ -247,10 +250,11 @@ configuration:
     false: "&cNo"
   database:
     migration:
-      confirm: "&fAre you sure you want to migrate all existing local player data to the database? This will overwrite any existing pronoun data in the database but keep the options data (fluid reminders, etc.) and may take a while. Type &c/{0} migratedata confirm&f to confirm. &cNot recommended for large amounts of players."
+      confirm: "&fAre you sure you want to migrate all existing local player data to the database? This will overwrite any existing pronoun data in the database but keep the options data (fluid reminders, etc.) and may take a while. Type &c/{0} migratedata confirm&f to confirm. Also reloads the plugin when done. &cNot recommended for large amounts of players."
       start: "&fStarting an attempt to migrate existing local player data to the database. This may take a while if there is a lot..."
-      success: "&aAll local player data has been migrated to the database successfully."
+      success: "&aAll local player data has been migrated to the database successfully and the plugin was reloaded."
       error: "&cAn error occurred while migrating the player data to the database."
+      not-enabled: "&cYou must enable use of the SQL database in the config.yml before migrating."
   help: "&cHere's some help with commands:"
   help-assign: # Variables here don't increase from {0} to {1}, {2} etc. because it uses a different method for displaying it. All variables below in the help section should be {0}.
     - "&8- &7/{0} &fassign &8- &fAssign or change someone else's pronouns."

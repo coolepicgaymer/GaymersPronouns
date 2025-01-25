@@ -153,7 +153,7 @@ display-format:
 #
 database:
   use: false
-  local-pronouns: false
+  local-pronouns: false # Unused. Read above.
   url: "jdbc:mysql://localhost/DatabaseName"
   user: "root"
   password: ""

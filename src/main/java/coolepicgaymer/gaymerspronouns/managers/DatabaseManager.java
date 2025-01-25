@@ -62,9 +62,10 @@ public class DatabaseManager {
     }
 
     public GPPlayer createFullPlayerProfile(String uuid, GPPlayer defaults) {
-        boolean optOutReminders;
-        boolean fluidReminders;
         try {
+            boolean optOutReminders;
+            boolean fluidReminders;
+
             PreparedStatement statementOptions = getConnection(false).prepareStatement("SELECT * FROM player_pronoun_options WHERE player = ?");
             PreparedStatement statementPronouns = getConnection(false).prepareStatement("SELECT * FROM player_pronouns WHERE player = ? ORDER BY priority");
 
@@ -79,7 +80,7 @@ public class DatabaseManager {
                 fluidReminders = (resultOptions.getInt(3) != 0);
             } else {
                 optOutReminders = defaults.isOptOutReminders();
-                fluidReminders = defaults.isOptOutReminders();
+                fluidReminders = defaults.isFluidReminders();
 
                 createPlayerOptionsEntry(defaults);
             }
@@ -113,7 +114,7 @@ public class DatabaseManager {
         statement.close();
     }
 
-    public void updatePlayerOptionsEntry(GPPlayer player) {
+    public boolean updatePlayerOptionsEntry(GPPlayer player) {
         try {
             PreparedStatement statement = getConnection(false).prepareStatement("UPDATE player_pronoun_options SET opt_out_reminders = ?, fluid_reminders = ? WHERE player = ?");
 
@@ -127,10 +128,13 @@ public class DatabaseManager {
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql-update-error"));
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
-    public void updatePlayerPronounsEntry(GPPlayer player) {
+    public boolean updatePlayerPronounsEntry(GPPlayer player) {
         try {
             PreparedStatement deleteStatement = getConnection(false).prepareStatement("DELETE FROM player_pronouns WHERE player = ?");
 
@@ -154,6 +158,9 @@ public class DatabaseManager {
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql-update-error"));
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 }

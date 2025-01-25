@@ -74,8 +74,8 @@ public final class GaymersPronouns extends JavaPlugin {
 
         playerChat.reload();
         playerJoin.reload();
-        displayManager.reload();
         userManager.reload();
+        displayManager.reload();
         configMenu.reload();
 
         adminCommand.reload();

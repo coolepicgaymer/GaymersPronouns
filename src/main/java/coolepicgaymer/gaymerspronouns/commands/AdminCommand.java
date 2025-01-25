@@ -29,6 +29,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
     private boolean configurable;
     private boolean logChanges;
     private boolean devMode;
+    private boolean useDatabase;
 
     private final String[] configure = {"format", "papi", "configure", "set", "pronouns"};
     private final String[] assign = {"assign", "unassign"};
@@ -61,6 +62,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
 
         reloadAliases();
 
+        useDatabase = plugin.getConfig().getBoolean("database.use");
         this.db = plugin.getDatabaseManager();
     }
 
@@ -214,15 +216,18 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "migratedata":
                     if (sender.hasPermission("gaymerspronouns.database")) {
-                        if (args.length > 1 && args[1].equalsIgnoreCase("confirm")){
+                        if (!useDatabase) sender.sendMessage(MessageManager.getMessage("configuration.database.migration.not-enabled", label));
+                        else if (args.length > 1 && args[1].equalsIgnoreCase("confirm")){
                             sender.sendMessage(MessageManager.getMessage("configuration.database.migration.start"));
-                            try {
-                                attemptMigratePlayerDataToDatabase();
-                            } catch (SQLException e) {
+                            plugin.getLogger().info(MessageManager.getMessage("console.sql.migration-started", sender.getName()));
+                            if (attemptMigratePlayerDataToDatabase()) {
+                                plugin.reload();
+                            } else {
                                 sender.sendMessage(MessageManager.getMessage("configuration.database.migration.error"));
-                                e.printStackTrace();
+                                plugin.getLogger().info(MessageManager.getMessage("console.sql.migration-error", sender.getName()));
                             }
                             sender.sendMessage(MessageManager.getMessage("configuration.database.migration.success"));
+                            plugin.getLogger().info(MessageManager.getMessage("console.sql.migration-success", sender.getName()));
                         } else {
                             sender.sendMessage(MessageManager.getMessage("configuration.database.migration.confirm", label));
                         }
@@ -235,11 +240,11 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         if (sender.hasPermission("gaymerspronouns.assign")) for (String s : MessageManager.getMessagesRepeat("configuration.help-assign", label)) sender.sendMessage(s);
         if (sender.hasPermission("gaymerspronouns.reload")) sender.sendMessage(MessageManager.getMessage("configuration.help-reload", label));
         if (devMode && configurable && sender.hasPermission("gaymerspronouns.configure")) for (String s : MessageManager.getMessagesRepeat("configuration.help-configure", label)) sender.sendMessage(s);
-        if (sender.hasPermission("gaymerspronouns.database")) for (String s : MessageManager.getMessagesRepeat("configuration.help-database", label)) sender.sendMessage(s);
+        if (sender.hasPermission("gaymerspronouns.database") && useDatabase) for (String s : MessageManager.getMessagesRepeat("configuration.help-database", label)) sender.sendMessage(s);
         return false;
     }
 
-    private void attemptMigratePlayerDataToDatabase() throws SQLException {
+    private boolean attemptMigratePlayerDataToDatabase() {
         List<GPPlayer> players = new ArrayList<>();
 
         File folder = new File(plugin.getDataFolder() + "/users/");
@@ -249,9 +254,11 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         }
 
         for (GPPlayer player : players) {
-            db.createFullPlayerProfile(player.getUuid(), player);
-            db.updatePlayerPronounsEntry(player);
+            if (db.createFullPlayerProfile(player.getUuid(), player) == null) return false;
+            if (!db.updatePlayerPronounsEntry(player)) return false;
         }
+
+        return true;
     }
 
     private void attemptChangeLanguage(CommandSender sender, String lang) {
@@ -410,7 +417,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             if (sender.hasPermission("gaymerspronouns.reload")) {
                 if ("reload".startsWith(args[0].toLowerCase())) availableArguments.add("reload");
             }
-            if (sender.hasPermission("gaymerspronouns.database")) {
+            if (sender.hasPermission("gaymerspronouns.database") && useDatabase) {
                 if ("migratedata".startsWith(args[0].toLowerCase())) availableArguments.add("migratedata");
             }
             return availableArguments;

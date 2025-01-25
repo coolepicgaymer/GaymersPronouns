@@ -76,6 +76,16 @@ console:
   deleted-pronouns: "Pronomener med ID {0} slettet af {1} ({2})."
   pronoun-format: "{0}/{1}/{2}/{3}, {4}"
   players-only: "Dette kan kun gøres af in-game spillere."
+  sql:
+    connected: "Oprettede forbindelse til SQL database."
+    not-connected: "Kunne ikke oprette forbindelse til SQL database."
+    query-error: "Der skete en fejl med en query til SQL databasen."
+    table-creation-error: "Kunne ikke oprette tabellen i SQL databasen."
+    player-load-error: "Kunne ikke loade spiller {0} fra SQL databasen. Bruger standard-indstillinger."
+    sql-update-error: "Kunne ikke opdatere data i SQL database."
+    migration-started: "En spillerdatamigration blev startet af {0}."
+    migration-success: "Migrationen af spillerdata var successfuld."
+    migration-error: "Migrationen af spillerdata fejlede."
 assignments:
   assigned-new: "&7Gav pronomenerne &f{0}&7 til &f{1}&7."
   assigned-changed: "&7Gav pronomenerne &f{0}&7 til &f{1}&7 (Tidligere &f{2}&7)."
@@ -84,13 +94,6 @@ assignments:
   unrecognized-pronouns: "&7Ukendte pronomener: &f\"{0}\""
   name-required: "&7Du skal skrive et brugernavn."
   pronouns-required: "&7Du skal skrive hvilke pronomener du vil give spilleren."
-  sql:
-    connected: "Oprettede forbindelse til SQL database."
-    not-connected: "Kunne ikke oprette forbindelse til SQL database."
-    query-error: "Der skete en fejl med en query til SQL databasen."
-    table-creation-error: "Kunne ikke oprette tabellen i SQL databasen."
-    player-load-error: "Kunne ikke loade spiller {0} fra SQL databasen. Bruger standard-indstillinger."
-    sql-update-error: "Kunne ikke opdatere data i SQL database."
 configuration:
   reload: "&aGenindlæste GaymersPronouns filer. &7(Tog {0} ms)"
   no-permission: "&cDu har ikke adgang til denne kommando."
@@ -243,10 +246,11 @@ configuration:
     false: "fra"
   database:
     migration:
-      confirm: "&fEr du sikker på, at du vil migrere alt eksisterende lokal spillerdata til databasen? Dette vil overskrive al eksisterende pronomen data i databasen, men begolde indstillinger (påmindelser, osv.) og kan tage noget tid. Skriv &c/{0} migratedata confirm&f for at bekræfte. &cIkke anbefalet for store mængder af spillere."
+      confirm: "&fEr du sikker på, at du vil migrere alt eksisterende lokal spillerdata til databasen? Dette vil overskrive al eksisterende pronomen data i databasen, men beholde indstillinger (påmindelser, osv.) og kan tage noget tid. Skriv &c/{0} migratedata confirm&f for at bekræfte. Genindlæser pluginet, når det er færdigt. &cIkke anbefalet for store mængder af spillere."
       start: "&fForsøger at migrere eksisterene lokal spillerdata til databasen. Det kan tage noget tid, hvis der er meget..."
-      success: "&aAl lokal spillerdata er blever succesfuldt migreret til databasen."
+      success: "&aAl lokal spillerdata er blevet succesfuldt migreret til databasen og pluginet er genindlæst."
       error: "&cDer skete en fejl med at migrere lokal spillerdata til databasen."
+      not-enabled: "&cDu skal slå brug af SQL databasen til i din config.yml, før du kan migrere."
   help: "Her er noget hjælp med kommandoer:"
   help-assign:
     - "&8- &7/{0} &fassign &8- &fSæt en anden spillers pronomener."

@@ -106,7 +106,7 @@ public class UserManager {
 
 
     public boolean hasPronouns(UUID uuid) {
-        return (getPlayer(uuid).getPronouns().size() <= 0);
+        return (getPlayer(uuid).getPronouns().size() > 0);
     }
 
 
