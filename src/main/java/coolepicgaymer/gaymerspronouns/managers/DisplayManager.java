@@ -6,6 +6,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class DisplayManager {
 
     GaymersPronouns plugin;
@@ -26,6 +28,10 @@ public class DisplayManager {
     }
 
 
+
+    public void updateDisplay(UUID uuid) {
+        if (tablist) updateDisplay(Bukkit.getPlayer(uuid));
+    }
 
     public void updateDisplay(Player player) {
         if (tablist) {

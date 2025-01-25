@@ -1,3 +1,5 @@
+version: 3 # <-- Lad være med at ændre dette tal.
+
 no-pronouns-reminder: "&cDu har ikke sat dine pronomener. &7Klik her, for at sætte dem nu."
 fluid-reminder: "&7Dine pronomener er sat til &c{0}&7. Klik her for at ændre dem, eller ignorer beskeden for at beholde dem."
 change-pronouns-hover: "&7Klik her for at ændre dine pronomener nu."
@@ -82,6 +84,13 @@ assignments:
   unrecognized-pronouns: "&7Ukendte pronomener: &f\"{0}\""
   name-required: "&7Du skal skrive et brugernavn."
   pronouns-required: "&7Du skal skrive hvilke pronomener du vil give spilleren."
+  sql:
+    connected: "Oprettede forbindelse til SQL database."
+    not-connected: "Kunne ikke oprette forbindelse til SQL database."
+    query-error: "Der skete en fejl med en query til SQL databasen."
+    table-creation-error: "Kunne ikke oprette tabellen i SQL databasen."
+    player-load-error: "Kunne ikke loade spiller {0} fra SQL databasen. Bruger standard-indstillinger."
+    sql-update-error: "Kunne ikke opdatere data i SQL database."
 configuration:
   reload: "&aGenindlæste GaymersPronouns filer. &7(Tog {0} ms)"
   no-permission: "&cDu har ikke adgang til denne kommando."
@@ -232,6 +241,12 @@ configuration:
     generic-message: "Hej"
     true: "til"
     false: "fra"
+  database:
+    migration:
+      confirm: "&fEr du sikker på, at du vil migrere alt eksisterende lokal spillerdata til databasen? Dette vil overskrive al eksisterende pronomen data i databasen, men begolde indstillinger (påmindelser, osv.) og kan tage noget tid. Skriv &c/{0} migratedata confirm&f for at bekræfte. &cIkke anbefalet for store mængder af spillere."
+      start: "&fForsøger at migrere eksisterene lokal spillerdata til databasen. Det kan tage noget tid, hvis der er meget..."
+      success: "&aAl lokal spillerdata er blever succesfuldt migreret til databasen."
+      error: "&cDer skete en fejl med at migrere lokal spillerdata til databasen."
   help: "Her er noget hjælp med kommandoer:"
   help-assign:
     - "&8- &7/{0} &fassign &8- &fSæt en anden spillers pronomener."
@@ -243,3 +258,5 @@ configuration:
     - "&8- &7/{0} &fpronouns &8- &fTilføj, fjern eller rediger listen af pronomener."
     - "&8- &7/{0} &fformat &8- &fÆndr display format (hvis slået til)."
     - "&8- &7/{0} &fpapi &8- &fInformation om brug af PlaceholderAPI (hvis installeret)."
+  help-database:
+    - "&8- &7/{0} &fmigratedata &8- &fMigrerer eksisterende lokal spillerdata til databasen."

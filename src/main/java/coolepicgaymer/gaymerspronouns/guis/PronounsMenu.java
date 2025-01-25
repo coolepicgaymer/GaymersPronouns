@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 
 public class PronounsMenu {
 
-    private static UserManager userManager = GaymersPronouns.getUserManager();
-    private static PronounManager pronounManager = GaymersPronouns.getPronounManager();
+    private static final UserManager userManager = GaymersPronouns.getUserManager();
+    private static final PronounManager pronounManager = GaymersPronouns.getPronounManager();
     private static HashMap<Player, List<Integer>> picked = new HashMap<>();
     private static HashMap<Player, Integer> playerPage = new HashMap<>();
     private static HashMap<Player, Boolean> multiple = new HashMap<>();
@@ -215,7 +215,7 @@ public class PronounsMenu {
         if (status == 0) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.CYAN_STAINED_GLASS_PANE), MessageManager.getMessage("initialize-multiple-name"), MessageManager.getMessages("initialize-multiple-lore")));
         else if (status == 1) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.RED_STAINED_GLASS_PANE), MessageManager.getMessage("not-enough-multiple-name"), MessageManager.getMessages("not-enough-multiple-lore")));
         else if (status == 2) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
-        else if (status >= 3 || status <= -1) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.LIME_STAINED_GLASS_PANE), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
+        else for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.LIME_STAINED_GLASS_PANE), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
     }
 
     private static void startPickMultiple(Player player) {

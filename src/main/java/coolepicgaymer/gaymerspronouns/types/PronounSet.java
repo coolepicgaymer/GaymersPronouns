@@ -1,8 +1,5 @@
 package coolepicgaymer.gaymerspronouns.types;
 
-import coolepicgaymer.gaymerspronouns.GaymersPronouns;
-import coolepicgaymer.gaymerspronouns.managers.PronounManager;
-
 public class PronounSet {
 
     String display;

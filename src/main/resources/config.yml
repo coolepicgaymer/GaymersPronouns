@@ -11,7 +11,7 @@
 #
 # Which language you want to use. Currently available: EN (english) or DA (danish)
 # Keep in mind, you can also modify the messages.yml yourself.
-# It may seem large, but only the top half is necessary. The bottom half is only visible to admins and the console (which you probably aren't doing since you're reading this).
+# It may seem large, but only the top half is necessary. The bottom half is only visible to admins and the console (which you probably don't need since you can read this).
 #
 # Note: You may want to reset the pronouns.yml and messages.yml and generate new ones in the new language.
 # This can be done by deleting or renaming the files and reloading the plugin or restarting the server.
@@ -141,10 +141,27 @@ display-format:
   update-tablist-periodically: false
   tablist-update-delay: 60
 
+
+#
+# In case you want to use an SQL database. I won't provide much information for this one since if you want to use this, you probably know what you're doing.
+#
+# NOTICE: In order to accommodate any multi-language situations, the pronouns.yml remain local, so if you want identical pronouns everywhere, you must copy it for now.
+# I will most likely allow for having the pronoun sets in the database, just not in this update. So, ignore the "local-pronouns" setting as it is completely unused as of
+# right now but will likely be utilized in the future. It is only there so you don't have to update the config in the future.
+#
+# If you don't know what this is, just ignore all of this and keep "use" as "false".
+#
+database:
+  use: false
+  local-pronouns: false
+  url: "jdbc:mysql://localhost/DatabaseName"
+  user: "root"
+  password: ""
+
 #
 # Do NOT change this or you may lose your config.
 #
-version: 2
+version: 3
 
 #
 # Enable experimental features?

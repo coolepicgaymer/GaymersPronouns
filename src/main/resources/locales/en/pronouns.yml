@@ -58,6 +58,7 @@ pronouns:
     possessive: "This player's"
     reflexive: "The player"
     verb: "Is"
+    hidden: true
 
   #
   #  These will be shown on the left side of the menu.

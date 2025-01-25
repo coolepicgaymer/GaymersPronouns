@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerJoin implements Listener {
 
@@ -27,8 +28,8 @@ public class PlayerJoin implements Listener {
     boolean popup;
 
     public PlayerJoin(GaymersPronouns plugin) {
-        displayManager = plugin.getDisplayManager();
-        userManager = plugin.getUserManager();
+        displayManager = GaymersPronouns.getDisplayManager();
+        userManager = GaymersPronouns.getUserManager();
         this.plugin = plugin;
     }
 
@@ -41,11 +42,11 @@ public class PlayerJoin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        userManager.loadPlayer(e.getPlayer().getUniqueId());
+
         displayManager.updateDisplay(e.getPlayer());
         if (update) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                displayManager.updateDisplay(e.getPlayer());
-            }, delay);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> displayManager.updateDisplay(e.getPlayer()), delay);
         }
 
         if (popup && !e.getPlayer().hasPlayedBefore()) {
@@ -59,6 +60,11 @@ public class PlayerJoin implements Listener {
                 sendReminder(e.getPlayer(), "no-pronouns-reminder");
             }
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerQuitEvent e) {
+        userManager.unloadPlayer(e.getPlayer().getUniqueId());
     }
 
     private void sendReminder(Player player, String message) {

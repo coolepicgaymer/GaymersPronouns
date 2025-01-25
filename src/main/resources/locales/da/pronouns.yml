@@ -56,6 +56,7 @@ pronouns:
     possessive: "Denne spillers"
     reflexive: "Sig selv"
     verb: "Er"
+    hidden: true
 
   #
   # Dette vil blive vist på den venstre side af menuen.

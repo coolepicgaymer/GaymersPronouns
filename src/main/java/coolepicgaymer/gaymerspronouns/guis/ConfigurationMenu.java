@@ -4,7 +4,6 @@ import coolepicgaymer.gaymerspronouns.managers.PronounManager;
 import coolepicgaymer.gaymerspronouns.utilities.GPUtils;
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import coolepicgaymer.gaymerspronouns.managers.MessageManager;
-import coolepicgaymer.gaymerspronouns.managers.UserManager;
 import coolepicgaymer.gaymerspronouns.utilities.InventoryUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,13 +19,11 @@ import java.util.List;
 public class ConfigurationMenu {
 
     private final GaymersPronouns plugin;
-    private final UserManager um;
     private FileConfiguration config;
     private final PronounManager pronounManager;
 
     public ConfigurationMenu(GaymersPronouns plugin) {
         this.plugin = plugin;
-        um = GaymersPronouns.getUserManager();
         pronounManager = GaymersPronouns.getPronounManager();
     }
 
@@ -52,7 +49,7 @@ public class ConfigurationMenu {
 
 
 
-        /**
+        /* TODO:
          *  pronoun settings
          *   - max pronouns, click to cycle through 1-9 and no max
          *   - default pronouns
@@ -60,9 +57,7 @@ public class ConfigurationMenu {
          *   - special pronoun list
          *   - reminder settings
          *   - enable prompt on first join
-         *
          *  instructions to add more w/ commands
-         *
          *  locale (+ resetting pronouns and messages)
          *  reset config
          *  reset pronouns
@@ -103,7 +98,6 @@ public class ConfigurationMenu {
             if (e.isRightClick()) {
                 e.getWhoClicked().closeInventory();
                 for (String s : MessageManager.getMessages("configuration.instructions.chatformat")) e.getWhoClicked().sendMessage(s);
-                return;
             }
             else {
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("configuration.toggles.chatformat", getBooleanAsString(toggleDisplayMethod("chatformat", e.getWhoClicked().getName()))), MessageManager.getMessage("configuration.toggles.requires-reload"));
@@ -114,7 +108,6 @@ public class ConfigurationMenu {
             if (e.isRightClick()) {
                 e.getWhoClicked().closeInventory();
                 for (String s : MessageManager.getMessages("configuration.instructions.chathover")) e.getWhoClicked().sendMessage(s);
-                return;
             }
             else {
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("configuration.toggles.chathover", getBooleanAsString(toggleDisplayMethod("chathover", e.getWhoClicked().getName()))), MessageManager.getMessage("configuration.toggles.requires-reload"));
@@ -125,7 +118,6 @@ public class ConfigurationMenu {
             if (e.isRightClick()) {
                 e.getWhoClicked().closeInventory();
                 for (String s : MessageManager.getMessages("configuration.instructions.tablist")) e.getWhoClicked().sendMessage(s);
-                return;
             }
             else {
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("configuration.toggles.tablist", getBooleanAsString(toggleDisplayMethod("tablist", e.getWhoClicked().getName()))), MessageManager.getMessage("configuration.toggles.requires-reload"));

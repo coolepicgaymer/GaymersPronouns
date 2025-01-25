@@ -1,6 +1,7 @@
 package coolepicgaymer.gaymerspronouns.commands;
 
 import coolepicgaymer.gaymerspronouns.managers.*;
+import coolepicgaymer.gaymerspronouns.types.GPPlayer;
 import coolepicgaymer.gaymerspronouns.types.PronounSet;
 import coolepicgaymer.gaymerspronouns.utilities.GPUtils;
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
@@ -14,31 +15,34 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class AdminCommand implements CommandExecutor, TabCompleter {
 
-    GaymersPronouns plugin;
-    ConfigurationMenu configMenu;
+    private final GaymersPronouns plugin;
+    private final ConfigurationMenu configMenu;
 
-    boolean configurable;
-    boolean logChanges;
-    boolean devMode;
+    private boolean configurable;
+    private boolean logChanges;
+    private boolean devMode;
 
-    String[] configure = {"format", "papi", "configure", "set", "pronouns"};
-    String[] assign = {"assign", "unassign"};
-    String[] formats = {"chat", "hover", "tablist"};
-    String[] variables = {"{USERNAME}", "{DISPLAYNAME}", "{PRONOUNS}"};
-    String[] locales = {"en", "da"};
-    String[] configValues = {"language", "default-pronouns", "max-pronouns", "log-pronoun-changes", "random-priority-in-placeholders", "prompt-on-first-join", "default-no-pronouns-reminder", "show-tutorial-item", "update-tablist-periodically", "tablist-update-delay"};
-    List<String> pronounAliases;
+    private final String[] configure = {"format", "papi", "configure", "set", "pronouns"};
+    private final String[] assign = {"assign", "unassign"};
+    private final String[] formats = {"chat", "hover", "tablist"};
+    private final String[] variables = {"{USERNAME}", "{DISPLAYNAME}", "{PRONOUNS}"};
+    private final String[] locales = {"en", "da"};
+    private final String[] configValues = {"language", "default-pronouns", "max-pronouns", "log-pronoun-changes", "random-priority-in-placeholders", "prompt-on-first-join", "default-no-pronouns-reminder", "show-tutorial-item", "update-tablist-periodically", "tablist-update-delay"};
+    private List<String> pronounAliases;
 
-    UserManager um;
-    PronounManager pm;
+    private final UserManager um;
+    private final PronounManager pm;
+    private DatabaseManager db;
 
-    HashMap<String, Integer> aliases;
+    private HashMap<String, Integer> aliases;
 
     public AdminCommand(GaymersPronouns plugin, ConfigurationMenu configMenu) {
         this.plugin = plugin;
@@ -56,6 +60,8 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         devMode = plugin.getConfig().getBoolean("developer-mode", false);
 
         reloadAliases();
+
+        this.db = plugin.getDatabaseManager();
     }
 
     private void reloadAliases() {
@@ -84,7 +90,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             return false;
         }
         if (configurable) {
-
+            // TODO: add something i actually don't remember what it was but do something probably
         }
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
@@ -206,13 +212,46 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     break;
+                case "migratedata":
+                    if (sender.hasPermission("gaymerspronouns.database")) {
+                        if (args.length > 1 && args[1].equalsIgnoreCase("confirm")){
+                            sender.sendMessage(MessageManager.getMessage("configuration.database.migration.start"));
+                            try {
+                                attemptMigratePlayerDataToDatabase();
+                            } catch (SQLException e) {
+                                sender.sendMessage(MessageManager.getMessage("configuration.database.migration.error"));
+                                e.printStackTrace();
+                            }
+                            sender.sendMessage(MessageManager.getMessage("configuration.database.migration.success"));
+                        } else {
+                            sender.sendMessage(MessageManager.getMessage("configuration.database.migration.confirm", label));
+                        }
+                        return false;
+                    }
+                    break;
             }
         }
         sender.sendMessage(MessageManager.getMessage("configuration.help"));
-        if (sender.hasPermission("gaymerspermission.assign")) for (String s : MessageManager.getMessagesRepeat("configuration.help-assign", label)) sender.sendMessage(s);
-        if (sender.hasPermission("gaymerspermission.reload")) sender.sendMessage(MessageManager.getMessage("configuration.help-reload", label));
-        if (devMode && configurable && sender.hasPermission("gaymerspermission.configure")) for (String s : MessageManager.getMessagesRepeat("configuration.help-configure", label)) sender.sendMessage(s);
+        if (sender.hasPermission("gaymerspronouns.assign")) for (String s : MessageManager.getMessagesRepeat("configuration.help-assign", label)) sender.sendMessage(s);
+        if (sender.hasPermission("gaymerspronouns.reload")) sender.sendMessage(MessageManager.getMessage("configuration.help-reload", label));
+        if (devMode && configurable && sender.hasPermission("gaymerspronouns.configure")) for (String s : MessageManager.getMessagesRepeat("configuration.help-configure", label)) sender.sendMessage(s);
+        if (sender.hasPermission("gaymerspronouns.database")) for (String s : MessageManager.getMessagesRepeat("configuration.help-database", label)) sender.sendMessage(s);
         return false;
+    }
+
+    private void attemptMigratePlayerDataToDatabase() throws SQLException {
+        List<GPPlayer> players = new ArrayList<>();
+
+        File folder = new File(plugin.getDataFolder() + "/users/");
+
+        if (folder.isDirectory()) for (File f : folder.listFiles()) {
+            players.add(um.getOfflineLocalGPPlayer(f.getName().substring(0, 36)));
+        }
+
+        for (GPPlayer player : players) {
+            db.createFullPlayerProfile(player.getUuid(), player);
+            db.updatePlayerPronounsEntry(player);
+        }
     }
 
     private void attemptChangeLanguage(CommandSender sender, String lang) {
@@ -237,13 +276,12 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             }
         }
         sender.sendMessage(MessageManager.getMessage("configuration.other.not-a-language"));
-        return;
     }
 
     private void attemptChangeNumber(CommandSender sender, String path, String value) {
         int i;
         try {
-            i = Integer.valueOf(value);
+            i = Integer.parseInt(value);
         } catch(NumberFormatException e) {
             sender.sendMessage(MessageManager.getMessage("configuration.other.not-a-number"));
             return;
@@ -270,6 +308,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             case "false":
             case "no":
                 bool = false;
+                break;
             default:
                 sender.sendMessage(MessageManager.getMessage("configuration.other.not-a-boolean"));
                 return;
@@ -309,7 +348,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
     private String joinArguments(String[] args, int offset) {
         StringBuilder s = new StringBuilder();
         for (int i = offset; i < args.length; i++) {
-            s.append(" " + args[i]);
+            s.append(" ").append(args[i]);
         }
         return s.substring(1);
     }
@@ -325,7 +364,6 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             else for (String s : MessageManager.getMessages("configuration.display-changes.chatformat", MessageManager.getMessage("configuration.display-changes.example-unavailable"))) sender.sendMessage(s);
             if (!plugin.getConfig().getList("display", new ArrayList<>()).contains("chatformat")) sender.sendMessage(MessageManager.getMessage("configuration.display-changes.format-disabled"));
             setFormat("chat-format", format, sender.getName());
-            return;
         } else {
             sender.sendMessage(MessageManager.getMessage("configuration.display-changes.must-contain-username"));
         }
@@ -337,7 +375,6 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         else for (String s : MessageManager.getMessages("configuration.display-changes.chathover", MessageManager.getMessage("configuration..example-unavailable"))) sender.sendMessage(s);
         if (!plugin.getConfig().getList("display", new ArrayList<>()).contains("chathover")) sender.sendMessage(MessageManager.getMessage("configuration.display-changes.format-disabled"));
         setFormat("chat-hover", format.split("\\n"), sender.getName());
-        return;
     }
 
     private void attemptChangeTablist(CommandSender sender, String[] args) {
@@ -348,7 +385,6 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             if (plugin.getConfig().getList("display", new ArrayList<>()).contains("tablist")) sender.sendMessage(MessageManager.getMessage("configuration.toggles.requires-reload"));
             else sender.sendMessage(MessageManager.getMessage("configuration.display-changes.format-disabled"));
             setFormat("tab-list", format, sender.getName());
-            return;
         } else {
             sender.sendMessage(MessageManager.getMessage("configuration.display-changes.must-contain-username"));
         }
@@ -361,14 +397,10 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         configMenu.reload();
     }
 
-    private void setConfig(String path, Object value, String username) {
-
-    }
-
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            List<String> availableArguments = new ArrayList();
+            List<String> availableArguments = new ArrayList<>();
             if (devMode && configurable && sender.hasPermission("gaymerspronouns.configure")) {
                 for (String s : configure) if (s.startsWith(args[0].toLowerCase())) availableArguments.add(s);
             }
@@ -378,18 +410,21 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             if (sender.hasPermission("gaymerspronouns.reload")) {
                 if ("reload".startsWith(args[0].toLowerCase())) availableArguments.add("reload");
             }
+            if (sender.hasPermission("gaymerspronouns.database")) {
+                if ("migratedata".startsWith(args[0].toLowerCase())) availableArguments.add("migratedata");
+            }
             return availableArguments;
         } else if (args.length > 1) {
             if (args.length > 2 && args[0].equalsIgnoreCase("assign")) {
                 if (sender.hasPermission("gaymerspronouns.assign")) {
-                    List<String> availableArguments = new ArrayList();
+                    List<String> availableArguments = new ArrayList<>();
                     for (String s : pronounAliases) if (s.toLowerCase().contains(args[args.length - 1].toLowerCase())) availableArguments.add(s);
                     return availableArguments;
                 }
             } else if (devMode) {
                 if (args[0].equalsIgnoreCase("format")) {
                     if (configurable && sender.hasPermission("gaymerspronouns.configure")) {
-                        List<String> availableArguments = new ArrayList();
+                        List<String> availableArguments = new ArrayList<>();
                         if (args.length == 2) {
                             for (String s : formats) if (s.startsWith(args[1].toLowerCase())) availableArguments.add(s);
                         } else {
@@ -401,11 +436,11 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
                 } else if (args[0].equalsIgnoreCase("set")) {
                     if (configurable && sender.hasPermission("gaymerspronouns.configure")) {
                         if (args.length == 2) {
-                            List<String> availableArguments = new ArrayList();
+                            List<String> availableArguments = new ArrayList<>();
                             for (String s : configValues) if (s.toLowerCase().contains(args[args.length - 1].toLowerCase())) availableArguments.add(s);
                             return availableArguments;
                         } else if (args.length == 3) {
-                            List<String> availableArguments = new ArrayList();
+                            List<String> availableArguments = new ArrayList<>();
                             switch (args[1].toLowerCase()) {
                                 case "language":
                                 case "locale":

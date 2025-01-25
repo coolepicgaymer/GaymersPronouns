@@ -27,7 +27,7 @@ public class PronounManager {
     public PronounManager(GaymersPronouns plugin) {
         defaults = new HashMap<>();
         pronouns = new HashMap<>();
-        configManager = plugin.getConfigManager();
+        configManager = GaymersPronouns.getConfigManager();
         this.plugin = plugin;
     }
 
@@ -71,7 +71,6 @@ public class PronounManager {
                 pronouns.put(id, new PronounSet(section.getString(key + ".display"), section.getString(key + ".dominant", null), section.getString(key + ".subjective", getDefaultPronoun("subjective")), section.getString(key + ".objective", getDefaultPronoun("objective")), section.getString(key + ".possessive", getDefaultPronoun("possessive")), section.getString(key + ".reflexive", getDefaultPronoun("reflexive")), section.getString(key + ".verb", getDefaultPronoun("verb")), section.getBoolean(key + ".hidden", false)));
             } else {
                 plugin.getLogger().warning("Pronoun " + key + " is invalid. Ignoring it for now...");
-                continue;
             }
         }
 
@@ -90,19 +89,6 @@ public class PronounManager {
 
     public ArrayList<Integer> getGroup2() {
         return group2;
-    }
-
-
-
-    /**
-     * Get the pronouns.yml.
-     * @return the pronouns.yml as a FileConfiguration.
-     */
-    private FileConfiguration getPronounsConfig() {
-        if (config == null) {
-            reloadPronouns();
-        }
-        return config;
     }
 
 

@@ -21,6 +21,7 @@ permissions:
       gaymerspronouns.assign: true
       gaymerspronouns.configure: true
       gaymerspronouns.reload: true
+      gaymerspronouns.database: true
   gaymerspronouns.admin:
     description: Allows the player to use the admin command.
   gaymerspronouns.assign:
@@ -29,3 +30,5 @@ permissions:
     description: Allows the player to configure the plugin from in-game.
   gaymerspronouns.reload:
     description: Allows the player to reload the plugin.
+  gaymerspronouns.database:
+    description: Allows the player to use database commands.

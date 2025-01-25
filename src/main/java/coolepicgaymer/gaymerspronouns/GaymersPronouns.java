@@ -21,6 +21,7 @@ public final class GaymersPronouns extends JavaPlugin {
     private static MessageManager messageManager;
     private ConfigurationMenu configMenu;
     private PlaceholderManager placeholderManager;
+    private DatabaseManager databaseManager;
 
     private static PlayerChat playerChat;
     private static AdminCommand adminCommand;
@@ -39,7 +40,7 @@ public final class GaymersPronouns extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryEvents(configMenu), this);
         Bukkit.getPluginManager().registerEvents((playerChat = new PlayerChat(this)), this);
 
-        new GPUtils(this);
+        GPUtils.reload();
 
         new MainPronounCommand(this);
         adminCommand = new AdminCommand(this, configMenu);
@@ -47,7 +48,6 @@ public final class GaymersPronouns extends JavaPlugin {
         if (GPUtils.isPapiInstalled()) (placeholderManager = new PlaceholderManager(this)).register();
 
         reload();
-
     }
 
 
@@ -69,6 +69,8 @@ public final class GaymersPronouns extends JavaPlugin {
         pronounManager.reload();
 
         messageManager.reloadMessages();
+
+        if (getConfig().getBoolean("database.use")) databaseManager = new DatabaseManager(this, getConfig().getString("database.url"), getConfig().getString("database.user"), getConfig().getString("database.password"));
 
         playerChat.reload();
         playerJoin.reload();
@@ -98,5 +100,7 @@ public final class GaymersPronouns extends JavaPlugin {
     public static ConfigManager getConfigManager() {
         return configManager;
     }
+
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
 
 }

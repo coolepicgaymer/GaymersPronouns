@@ -1,4 +1,4 @@
-version: 2 # Do NOT change this unless you know what you're doing or have been specifically instructed to do so
+version: 3 # Do NOT change this unless you know what you're doing or have been specifically instructed to do so
 
 no-pronouns-reminder: "&cYou don't have any pronouns set. &7Click here to set them now."
 fluid-reminder: "&7Your pronouns are currently set to &c{0}&7. Click here to change them, or ignore this to keep them."
@@ -76,6 +76,13 @@ console:
   deleted-pronouns: "Pronouns with ID {0} deleted by {1} ({2})."
   pronoun-format: "{0}/{1}/{2}/{3}, {4}"
   players-only: "This can only be done by in-game players."
+  sql:
+    connected: "Connected to SQL database successfully."
+    not-connected: "Failed to connect to SQL database."
+    query-error: "Unable to execute SQL query."
+    table-creation-error: "Unable to create table in SQL database."
+    player-load-error: "Could not load player {0} from SQL database. Using defaults for now."
+    sql-update-error: "Failed to update data in SQL database."
 assignments:
   assigned-new: "&7Assigned the pronouns &f{0}&7 for &f{1}&7."
   assigned-changed: "&7Assigned the pronouns &f{0}&7 for &f{1}&7 (Previously &f{2}&7)."
@@ -238,6 +245,12 @@ configuration:
     generic-message: "Hello"
     true: "&aYes"
     false: "&cNo"
+  database:
+    migration:
+      confirm: "&fAre you sure you want to migrate all existing local player data to the database? This will overwrite any existing pronoun data in the database but keep the options data (fluid reminders, etc.) and may take a while. Type &c/{0} migratedata confirm&f to confirm. &cNot recommended for large amounts of players."
+      start: "&fStarting an attempt to migrate existing local player data to the database. This may take a while if there is a lot..."
+      success: "&aAll local player data has been migrated to the database successfully."
+      error: "&cAn error occurred while migrating the player data to the database."
   help: "&cHere's some help with commands:"
   help-assign: # Variables here don't increase from {0} to {1}, {2} etc. because it uses a different method for displaying it. All variables below in the help section should be {0}.
     - "&8- &7/{0} &fassign &8- &fAssign or change someone else's pronouns."
@@ -249,3 +262,5 @@ configuration:
     - "&8- &7/{0} &fpronouns &8- &fAdd, remove, or edit pronouns."
     - "&8- &7/{0} &fformat &8- &fChange display formats (if enabled)."
     - "&8- &7/{0} &fpapi &8- &fInfo on how to use PlaceholderAPI (if installed)."
+  help-database:
+    - "&8- &7/{0} &fmigratedata&8- &fMigrates any local player data to the database."

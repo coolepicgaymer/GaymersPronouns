@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
 
@@ -16,7 +17,7 @@ public class ConfigManager {
     }
 
     public void reload() {
-        locale = plugin.getConfig().getString("locale").toLowerCase();
+        locale = plugin.getConfig().getString("locale", "en").toLowerCase();
     }
 
     /**
@@ -28,14 +29,14 @@ public class ConfigManager {
     public FileConfiguration saveDefaultCustomConfig(String config, boolean overwrite) {
         File configFile = new File(plugin.getDataFolder(), config);
         YamlConfiguration customConfig = null;
-        Reader defConfigStream = null;
+        Reader defConfigStream;
         if (!configFile.exists() || overwrite) {
             try {
                 try {
-                    defConfigStream = new InputStreamReader(plugin.getResource("locales/" + locale + "/" + config), "UTF8");
+                    defConfigStream = new InputStreamReader(plugin.getResource("locales/" + locale + "/" + config), StandardCharsets.UTF_8);
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().warning("Invalid locale in config.yml: " + locale);
-                    defConfigStream = new InputStreamReader(plugin.getResource("locales/en/" + config), "UTF8");
+                    defConfigStream = new InputStreamReader(plugin.getResource("locales/en/" + config), StandardCharsets.UTF_8);
                 }
                 customConfig = YamlConfiguration.loadConfiguration(defConfigStream);
                 customConfig.save(configFile);
@@ -57,24 +58,19 @@ public class ConfigManager {
     public FileConfiguration reloadCustomConfig(String config) {
         File configFile = new File(plugin.getDataFolder(), config);
         FileConfiguration customConfig = YamlConfiguration.loadConfiguration(configFile);
-        Reader defConfigStream = null;
+        Reader defConfigStream;
         YamlConfiguration defConfig;
         try {
-            try {
-                defConfigStream = new InputStreamReader(plugin.getResource("locales/" + locale + "/" + config), "UTF8");
-                defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-                defConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource("locales/en/" + config), "UTF8")));
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("Invalid locale in config.yml: " + locale);
-                defConfigStream = new InputStreamReader(plugin.getResource("locales/en/" + config), "UTF8");
-                defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            }
-            if (defConfigStream != null) {
-                customConfig.setDefaults(defConfig);
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            defConfigStream = new InputStreamReader(plugin.getResource("locales/" + locale + "/" + config), StandardCharsets.UTF_8);
+            defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            defConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource("locales/en/" + config), StandardCharsets.UTF_8)));
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Invalid locale in config.yml: " + locale);
+            defConfigStream = new InputStreamReader(plugin.getResource("locales/en/" + config), StandardCharsets.UTF_8);
+            defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
         }
+
+        customConfig.setDefaults(defConfig);
         return customConfig;
     }
 

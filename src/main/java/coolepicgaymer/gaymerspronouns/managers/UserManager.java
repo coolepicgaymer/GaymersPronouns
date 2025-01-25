@@ -1,67 +1,112 @@
 package coolepicgaymer.gaymerspronouns.managers;
 
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
-import org.bukkit.Bukkit;
+import coolepicgaymer.gaymerspronouns.types.GPPlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class UserManager {
 
-    GaymersPronouns plugin;
+    private final GaymersPronouns plugin;
 
-    ConfigManager configManager;
-    PronounManager pronounManager;
+    private final PronounManager pronounManager;
+    private DatabaseManager db;
 
     private boolean defaultReminders;
+    private boolean useDatabase;
+
+    private HashMap<UUID, GPPlayer> players;
 
 
     public UserManager(GaymersPronouns plugin) {
         this.plugin = plugin;
-        configManager = plugin.getConfigManager();
-        pronounManager = plugin.getPronounManager();
+        pronounManager = GaymersPronouns.getPronounManager();
     }
 
     public void reload() {
         defaultReminders = !plugin.getConfig().getBoolean("default-no-pronouns-reminder");
+        useDatabase = plugin.getConfig().getBoolean("database.use");
+
+        db = plugin.getDatabaseManager();
+
+        this.players = new HashMap<>();
+        for(Player p : plugin.getServer().getOnlinePlayers()) loadPlayer(p.getUniqueId());
+    }
+
+    public void loadPlayer(UUID uuid) {
+        if (useDatabase) {
+            GPPlayer defaults = new GPPlayer(uuid.toString(), new ArrayList<>(), defaultReminders, false);
+            GPPlayer player = db.createFullPlayerProfile(uuid.toString(), defaults);
+
+            if (player != null) players.put(uuid, player);
+            else {
+                players.put(uuid, defaults);
+                plugin.getLogger().warning(MessageManager.getMessage("console.sql.player-load-error", uuid.toString()));
+            }
+        } else {
+            List<Integer> pronouns;
+            boolean optOutReminders;
+            boolean fluidReminders;
+
+            YamlConfiguration config = getUserFile(uuid);
+
+            if (!config.isSet("pronouns")) pronouns = new ArrayList<>();
+            else pronouns = config.getIntegerList("pronouns");
+            optOutReminders = config.getBoolean("opt-out-of-reminders", defaultReminders);
+            fluidReminders = config.getBoolean("fluid-reminders");
+
+            players.put(uuid, new GPPlayer(uuid.toString(), pronouns, optOutReminders, fluidReminders));
+        }
+    }
+
+    public void unloadPlayer(UUID uuid) {
+        players.remove(uuid);
+    }
+
+    public GPPlayer getPlayer(UUID uuid) {
+        if (!players.containsKey(uuid)) loadPlayer(uuid);
+        return players.get(uuid);
     }
 
 
 
     public void setOptOutReminders(UUID uuid, boolean value) {
-        setSingleValue(uuid, "opt-out-of-reminders", value);
+        getPlayer(uuid).setOptOutReminders(value);
+
+        if (useDatabase) db.updatePlayerOptionsEntry(getPlayer(uuid));
+        else setSingleValue(uuid, "opt-out-of-reminders", value);
     }
 
 
 
     public boolean getOptOutReminders(UUID uuid) {
-        return getUserFile(uuid).getBoolean("opt-out-of-reminders", defaultReminders);
+        return getPlayer(uuid).isOptOutReminders();
     }
 
 
 
     public void setFluidReminders(UUID uuid, boolean value) {
-        setSingleValue(uuid, "fluid-reminders", value);
+        getPlayer(uuid).setFluidReminders(value);
+
+        if (useDatabase) db.updatePlayerOptionsEntry(getPlayer(uuid));
+        else setSingleValue(uuid, "fluid-reminders", value);
     }
 
 
 
     public boolean getFluidReminders(UUID uuid) {
-        return getUserFile(uuid).getBoolean("fluid-reminders");
+        return getPlayer(uuid).isFluidReminders();
     }
 
 
 
     public boolean hasPronouns(UUID uuid) {
-        YamlConfiguration config = getUserFile(uuid);
-        if (!config.isSet("pronouns") || config.getList("pronouns").size() <= 0) return false;
-        else return true;
+        return (getPlayer(uuid).getPronouns().size() <= 0);
     }
 
 
@@ -75,8 +120,12 @@ public class UserManager {
 
 
     public void setUserPronouns(UUID uuid, List<Integer> pronouns) {
-        setSingleValue(uuid, "pronouns", pronouns);
-        GaymersPronouns.getDisplayManager().updateDisplay(Bukkit.getPlayer(uuid));
+        getPlayer(uuid).setPronouns(pronouns);
+
+        if (useDatabase) db.updatePlayerPronounsEntry(getPlayer(uuid));
+        else setSingleValue(uuid, "pronouns", pronouns);
+
+        GaymersPronouns.getDisplayManager().updateDisplay(uuid);
     }
 
 
@@ -90,10 +139,7 @@ public class UserManager {
 
 
     public List<Integer> getUserPronouns(UUID uuid) {
-        YamlConfiguration config = getUserFile(uuid);
-
-        if (!config.isSet("pronouns")) return new ArrayList<>();
-        return config.getIntegerList("pronouns");
+        return getPlayer(uuid).getPronouns();
     }
 
     public int maxPronouns() {
@@ -145,9 +191,9 @@ public class UserManager {
         if (pronouns.size() == 1) {
             return pronounManager.getPronounSets().get(pronouns.get(0)).getDisplay();
         } else if (pronouns.size() > 1) {
-            String result = "";
+            StringBuilder result = new StringBuilder();
             for (int id : pronouns) {
-                result += "/" + pronounManager.getPronounSets().get(id).getDominant();
+                result.append("/").append(pronounManager.getPronounSets().get(id).getDominant());
             }
             return result.substring(1);
         } else {
@@ -155,11 +201,21 @@ public class UserManager {
         }
     }
 
+    public GPPlayer getOfflineLocalGPPlayer(String uuid) {
+        YamlConfiguration user = getUserFile(uuid);
+        List<Integer> pronouns = user.getIntegerList("pronouns");
+        if (pronouns == null) pronouns = new ArrayList<>();
 
+        return new GPPlayer(uuid, pronouns, user.getBoolean("opt-out-of-reminders", defaultReminders), user.getBoolean("fluid-reminders", false));
+    }
 
-    private YamlConfiguration getUserFile(UUID uuid) {
+    private YamlConfiguration getUserFile(String uuid) {
         File file = new File(plugin.getDataFolder() + "/users/" + uuid + ".yml");
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+    private YamlConfiguration getUserFile(UUID uuid) {
+        return getUserFile(uuid.toString());
     }
 
     private void setUserFile(UUID uuid, YamlConfiguration config) {

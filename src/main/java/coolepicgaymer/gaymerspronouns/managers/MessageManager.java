@@ -10,23 +10,22 @@ import java.util.logging.Logger;
 
 public class MessageManager {
 
-    private ConfigManager configManager;
+    private final ConfigManager configManager;
     private static FileConfiguration messages;
 
     Logger logger;
 
-    private final int version = 2;
-
     public MessageManager(GaymersPronouns plugin) {
         logger = plugin.getLogger();
 
-        configManager = plugin.getConfigManager();
+        configManager = GaymersPronouns.getConfigManager();
     }
 
     public void reloadMessages() {
         configManager.saveDefaultCustomConfig("messages.yml", false);
         messages = configManager.reloadCustomConfig("messages.yml");
 
+        int version = 3;                                                                                                                 // <-- CURRENT CONFIG VERSION
         if (!messages.isSet("version") || !messages.isInt("version") || messages.getInt("version") != version) {
             messages = configManager.regenerateCustomConfig("messages.yml");
 
@@ -36,7 +35,7 @@ public class MessageManager {
 
     public static String getMessage(String message) {
         if (!messages.isSet(message)) return message;
-        return ChatColor.translateAlternateColorCodes('&', messages.getString(message));
+        return ChatColor.translateAlternateColorCodes('&', messages.getString(message, message));
     }
 
     public static String getMessage(String message, String... replace) {

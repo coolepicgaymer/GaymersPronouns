@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class InventoryEvents implements Listener {
 
-    private ConfigurationMenu configMenu;
+    private final ConfigurationMenu configMenu;
 
     public InventoryEvents(ConfigurationMenu configMenu) {
         this.configMenu = configMenu;

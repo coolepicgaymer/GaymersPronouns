@@ -1,13 +1,11 @@
 package coolepicgaymer.gaymerspronouns.utilities;
 
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryUtils {
@@ -17,23 +15,6 @@ public class InventoryUtils {
         meta.setDisplayName(name);
         item.setItemMeta(meta);
         return item;
-    }
-
-    public static ItemStack getItem(Material material, ItemStack original, int amount, String... lore) {
-        ItemStack item = original.clone();
-        item.setAmount(amount);
-        item.setType(material);
-        return getItem(item, item.getItemMeta().getDisplayName(), lore);
-    }
-
-    public static ItemStack getItem(ItemStack item, String name, String... lore) {
-        ItemMeta meta = item.getItemMeta();
-        List<String> lores = new ArrayList<>();
-
-        for (String s : lore) {
-            lores.add(s);
-        }
-        return getItem(item, name, lores);
     }
 
     public static ItemStack getItem(ItemStack item, String name, List<String> lore) {

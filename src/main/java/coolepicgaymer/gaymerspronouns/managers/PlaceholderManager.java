@@ -2,8 +2,8 @@ package coolepicgaymer.gaymerspronouns.managers;
 
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class PlaceholderManager extends PlaceholderExpansion {
 
@@ -14,7 +14,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     public PlaceholderManager(GaymersPronouns plugin) {
         this.plugin = plugin;
-        this.userManager = plugin.getUserManager();
+        this.userManager = GaymersPronouns.getUserManager();
     }
 
     public void reload() {
@@ -22,16 +22,19 @@ public class PlaceholderManager extends PlaceholderExpansion {
     }
 
     @Override
+    @NotNull
     public String getIdentifier() {
         return "GaymersPronouns";
     }
 
     @Override
+    @NotNull
     public String getAuthor() {
         return "coolepicgaymer";
     }
 
     @Override
+    @NotNull
     public String getVersion() {
         return plugin.getDescription().getVersion();
     }

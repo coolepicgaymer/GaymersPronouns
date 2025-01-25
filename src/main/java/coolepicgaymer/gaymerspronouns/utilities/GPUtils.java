@@ -12,9 +12,9 @@ public class GPUtils {
     private static boolean papi;
     private static UserManager userManager;
 
-    public GPUtils(GaymersPronouns plugin) {
+    public static void reload() {
         papi = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
-        userManager = plugin.getUserManager();
+        userManager = GaymersPronouns.getUserManager();
     }
 
     public static String replaceVariables(Player player, String string) {
