@@ -35,7 +35,7 @@ public class DatabaseManager {
 
     public void close() {
         try {
-            if (connection != null && !connection.isClosed()) connection.close();
+            if (connection != null && !connection.isClosed() && connection.isValid(2)) connection.close();
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql.generic-error"));
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class DatabaseManager {
 
     private Connection getConnection(boolean force) {
         try {
-            if (connection == null || connection.isClosed() || force) connection = DriverManager.getConnection(url, user, password);
+            if (force || connection == null || connection.isClosed() || !connection.isValid(2)) connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql.not-connected"));
             e.printStackTrace();
