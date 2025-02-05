@@ -98,23 +98,44 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "assign":
                     if (sender.hasPermission("gaymerspronouns.assign")) {
-                        Player player;
                         if (args.length < 2) sender.sendMessage(MessageManager.getMessage("assignments.name-required"));
-                        else if ((player = Bukkit.getPlayerExact(args[1])) == null) sender.sendMessage(MessageManager.getMessage("player-not-online"));
-                        else attemptAssignPronouns(sender, player, args);
+                        else {
+                            Player player;
+                            String uuid = "";
+                            if ((player = Bukkit.getPlayerExact(args[1])) != null) attemptAssignPronouns(sender, player, args);
+                            else if (useDatabase && (uuid = db.tryGetOfflineUUID(args[1].toLowerCase())) != null) {
+                                attemptAssignPronounsOffline(sender, uuid, args[1], args);
+                            }
+                            else sender.sendMessage(MessageManager.getMessage("player-not-online"));
+                        }
                         return false;
                     }
                     break;
                 case "unassign":
                     if (sender.hasPermission("gaymerspronouns.assign")) {
-                        Player player;
                         if (args.length < 2) sender.sendMessage(MessageManager.getMessage("assignments.name-required"));
-                        else if ((player = Bukkit.getPlayerExact(args[1])) == null) sender.sendMessage(MessageManager.getMessage("player-not-online"));
-                        else if (um.hasPronouns(player.getUniqueId())) {
-                            sender.sendMessage(MessageManager.getMessage("assignments.unassigned", player.getName(), um.getDisplayUserPronouns(player.getUniqueId())));
-                            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.unassigned", sender.getName(), player.getName(), um.getDisplayUserPronouns(player.getUniqueId()))));
-                            um.setUserPronouns(player.getUniqueId(), new ArrayList<>());
-                        } else sender.sendMessage(MessageManager.getMessage("assignments.no-assigned-pronouns", player.getName()));
+                        else {
+                            Player player;
+                            String uuid;
+                            if ((player = Bukkit.getPlayerExact(args[1])) != null) {
+                                if (um.hasPronouns(player.getUniqueId().toString())) {
+                                    sender.sendMessage(MessageManager.getMessage("assignments.unassigned", player.getName(), um.getDisplayUserPronouns(player.getUniqueId().toString())));
+                                    if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.unassigned", sender.getName(), player.getName(), um.getDisplayUserPronouns(player.getUniqueId().toString()))));
+                                    um.setUserPronouns(player.getUniqueId().toString(), new ArrayList<>());
+                                } else sender.sendMessage(MessageManager.getMessage("assignments.no-assigned-pronouns", player.getName()));
+                            }
+                            else if (useDatabase && (uuid = db.tryGetOfflineUUID(args[1].toLowerCase())) != null) {
+                                GPPlayer gpPlayer = db.createFullPlayerProfile(uuid, um.getDefaultGPPlayer(uuid, args[1].toLowerCase()));
+                                if (gpPlayer.getPronouns().size() > 0) {
+                                    sender.sendMessage(MessageManager.getMessage("assignments.unassigned", args[1], um.getDisplayFromList(gpPlayer.getPronouns())));
+                                    if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.unassigned", sender.getName(), args[1], um.getDisplayFromList(gpPlayer.getPronouns()))));
+                                    gpPlayer.setPronouns(new ArrayList<>());
+                                    db.updatePlayerPronounsEntry(gpPlayer);
+                                } else sender.sendMessage(MessageManager.getMessage("assignments.no-assigned-pronouns", args[1]));
+                            }
+
+                            else sender.sendMessage(MessageManager.getMessage("player-not-online"));
+                        }
                         return false;
                     }
                     break;
@@ -234,6 +255,12 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
                         return false;
                     }
                     break;
+                case "testsql":
+                    if (sender.hasPermission("gaymerspronouns.database")) {
+                        db.test(sender);
+                        return false;
+                    }
+                    break;
             }
         }
         sender.sendMessage(MessageManager.getMessage("configuration.help"));
@@ -327,7 +354,10 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
         plugin.saveConfig();
     }
 
-    private void attemptAssignPronouns(CommandSender sender, Player player, String[] args) {
+    private void attemptAssignPronouns(CommandSender sender, Player p, String[] args) {
+        String uuid = p.getUniqueId().toString();
+        String username = p.getName();
+
         List<Integer> newPronouns = new ArrayList<>();
 
         for (int i = 2; i < args.length; i++) {
@@ -340,16 +370,43 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        if (um.hasPronouns(player.getUniqueId())) {
-            sender.sendMessage(MessageManager.getMessage("assignments.assigned-changed", um.getDisplayFromList(newPronouns), player.getName(), um.getDisplayUserPronouns(player.getUniqueId())));
-            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-changed", sender.getName(), um.getDisplayFromList(newPronouns), player.getName(), um.getDisplayUserPronouns(player.getUniqueId()))));
+        if (um.hasPronouns(uuid)) {
+            sender.sendMessage(MessageManager.getMessage("assignments.assigned-changed", um.getDisplayFromList(newPronouns), username, um.getDisplayUserPronouns(uuid)));
+            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-changed", sender.getName(), um.getDisplayFromList(newPronouns), username, um.getDisplayUserPronouns(uuid))));
         }
         else {
-            sender.sendMessage(MessageManager.getMessage("assignments.assigned-new", um.getDisplayFromList(newPronouns), player.getName()));
-            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-new", sender.getName(), um.getDisplayFromList(newPronouns), player.getName(), um.getDisplayUserPronouns(player.getUniqueId()))));
+            sender.sendMessage(MessageManager.getMessage("assignments.assigned-new", um.getDisplayFromList(newPronouns), username));
+            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-new", sender.getName(), um.getDisplayFromList(newPronouns))));
         }
 
-        um.setUserPronouns(player.getUniqueId(), newPronouns);
+        um.setUserPronouns(uuid, newPronouns);
+    }
+
+    private void attemptAssignPronounsOffline(CommandSender sender, String uuid, String username, String[] args) {
+        List<Integer> newPronouns = new ArrayList<>();
+
+        for (int i = 2; i < args.length; i++) {
+            int id;
+            if (aliases.containsKey(args[i].toLowerCase())) {
+                if (!newPronouns.contains((id = aliases.get(args[i].toLowerCase())))) newPronouns.add(id);
+            } else {
+                sender.sendMessage(MessageManager.getMessage("assignments.unrecognized-pronouns", args[i]));
+                return;
+            }
+        }
+
+        GPPlayer gpPlayer = um.getDefaultGPPlayer(uuid, args[1].toLowerCase());
+        if (gpPlayer.getPronouns().size() > 0) {
+            sender.sendMessage(MessageManager.getMessage("assignments.assigned-changed", um.getDisplayFromList(newPronouns), username, um.getDisplayFromList(gpPlayer.getPronouns())));
+            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-changed", sender.getName(), um.getDisplayFromList(newPronouns), username, um.getDisplayFromList(gpPlayer.getPronouns()))));
+
+        } else {
+            sender.sendMessage(MessageManager.getMessage("assignments.assigned-new", um.getDisplayFromList(newPronouns), username));
+            if (logChanges) plugin.getLogger().info((MessageManager.getMessage("console.assigned-new", sender.getName(), um.getDisplayFromList(newPronouns), username)));
+        }
+
+        gpPlayer.setPronouns(newPronouns);
+        db.updatePlayerPronounsEntry(gpPlayer);
     }
 
     private String joinArguments(String[] args, int offset) {
@@ -419,6 +476,7 @@ public class AdminCommand implements CommandExecutor, TabCompleter {
             }
             if (sender.hasPermission("gaymerspronouns.database") && useDatabase) {
                 if ("migratedata".startsWith(args[0].toLowerCase())) availableArguments.add("migratedata");
+                if ("testsql".startsWith(args[0].toLowerCase())) availableArguments.add("testsql");
             }
             return availableArguments;
         } else if (args.length > 1) {

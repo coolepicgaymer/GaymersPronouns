@@ -42,7 +42,8 @@ public class PlayerJoin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        userManager.loadPlayer(e.getPlayer().getUniqueId());
+        userManager.loadPlayer(e.getPlayer());
+        userManager.setUsername(e.getPlayer().getUniqueId().toString(), e.getPlayer().getName().toLowerCase());
 
         displayManager.updateDisplay(e.getPlayer());
         if (update) {
@@ -51,12 +52,12 @@ public class PlayerJoin implements Listener {
 
         if (popup && !e.getPlayer().hasPlayedBefore()) {
             e.getPlayer().openInventory(PronounsMenu.getInventory(e.getPlayer()));
-        } else if (userManager.hasPronouns(e.getPlayer().getUniqueId())) {
-            if (userManager.getFluidReminders(e.getPlayer().getUniqueId())) {
+        } else if (userManager.hasPronouns(e.getPlayer().getUniqueId().toString())) {
+            if (userManager.getFluidReminders(e.getPlayer().getUniqueId().toString())) {
                 sendReminder(e.getPlayer(), "fluid-reminder");
             }
         } else {
-            if (!userManager.getOptOutReminders(e.getPlayer().getUniqueId())) {
+            if (!userManager.getOptOutReminders(e.getPlayer().getUniqueId().toString())) {
                 sendReminder(e.getPlayer(), "no-pronouns-reminder");
             }
         }
@@ -64,11 +65,11 @@ public class PlayerJoin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerQuitEvent e) {
-        userManager.unloadPlayer(e.getPlayer().getUniqueId());
+        userManager.unloadPlayer(e.getPlayer().getUniqueId().toString());
     }
 
     private void sendReminder(Player player, String message) {
-        TextComponent msg = new TextComponent(MessageManager.getMessage(message, userManager.getDisplayUserPronouns(player.getUniqueId())));
+        TextComponent msg = new TextComponent(MessageManager.getMessage(message, userManager.getDisplayUserPronouns(player.getUniqueId().toString())));
         msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(MessageManager.getMessage("change-pronouns-hover"))));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pronouns"));
         player.spigot().sendMessage(msg);

@@ -25,7 +25,7 @@ public class MainPronounCommand implements CommandExecutor {
             if (arg == null) {
                 sender.sendMessage(MessageManager.getMessage("player-not-online", args[0]));
             } else {
-                sender.sendMessage(MessageManager.getMessage("pronouns-other", arg.getName(), GaymersPronouns.getUserManager().getDisplayUserPronouns(arg.getUniqueId())));
+                sender.sendMessage(MessageManager.getMessage("pronouns-other", arg.getName(), GaymersPronouns.getUserManager().getDisplayUserPronouns(arg.getUniqueId().toString())));
             }
             return false;
         }

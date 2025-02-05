@@ -20,7 +20,7 @@ public class UserManager {
     private boolean defaultReminders;
     private boolean useDatabase;
 
-    private HashMap<UUID, GPPlayer> players;
+    private HashMap<String, GPPlayer> players;
 
 
     public UserManager(GaymersPronouns plugin) {
@@ -35,47 +35,50 @@ public class UserManager {
         db = plugin.getDatabaseManager();
 
         this.players = new HashMap<>();
-        for(Player p : plugin.getServer().getOnlinePlayers()) loadPlayer(p.getUniqueId());
+        for(Player p : plugin.getServer().getOnlinePlayers()) loadPlayer(p);
     }
 
-    public void loadPlayer(UUID uuid) {
-        if (useDatabase) {
-            GPPlayer defaults = new GPPlayer(uuid.toString(), new ArrayList<>(), defaultReminders, false);
-            GPPlayer player = db.createFullPlayerProfile(uuid.toString(), defaults);
+    public GPPlayer getDefaultGPPlayer(String uuid, String username) {
+        return new GPPlayer(uuid, username.toLowerCase(), new ArrayList<>(), defaultReminders, false);
+    }
 
-            if (player != null) players.put(uuid, player);
+    public void loadPlayer(Player p) {
+        if (useDatabase) {
+            GPPlayer defaults = getDefaultGPPlayer(p.getUniqueId().toString(), p.getName().toLowerCase());
+            GPPlayer player = db.createFullPlayerProfile(p.getUniqueId().toString(), defaults);
+
+            if (player != null) players.put(p.getUniqueId().toString(), player);
             else {
-                players.put(uuid, defaults);
-                plugin.getLogger().warning(MessageManager.getMessage("console.sql.player-load-error", uuid.toString()));
+                players.put(p.getUniqueId().toString(), defaults);
+                plugin.getLogger().warning(MessageManager.getMessage("console.sql.player-load-error", p.getUniqueId().toString()));
             }
         } else {
             List<Integer> pronouns;
             boolean optOutReminders;
             boolean fluidReminders;
 
-            YamlConfiguration config = getUserFile(uuid);
+            YamlConfiguration config = getUserFile(p.getUniqueId().toString());
 
             if (!config.isSet("pronouns")) pronouns = new ArrayList<>();
             else pronouns = config.getIntegerList("pronouns");
             optOutReminders = config.getBoolean("opt-out-of-reminders", defaultReminders);
             fluidReminders = config.getBoolean("fluid-reminders");
 
-            players.put(uuid, new GPPlayer(uuid.toString(), pronouns, optOutReminders, fluidReminders));
+            players.put(p.getUniqueId().toString(), new GPPlayer(p.getUniqueId().toString(), p.getName().toLowerCase(), pronouns, optOutReminders, fluidReminders));
         }
     }
 
-    public void unloadPlayer(UUID uuid) {
+    public void unloadPlayer(String uuid) {
         players.remove(uuid);
     }
 
-    public GPPlayer getPlayer(UUID uuid) {
-        if (!players.containsKey(uuid)) loadPlayer(uuid);
+    public GPPlayer getPlayer(String uuid) {
         return players.get(uuid);
     }
 
 
 
-    public void setOptOutReminders(UUID uuid, boolean value) {
+    public void setOptOutReminders(String uuid, boolean value) {
         getPlayer(uuid).setOptOutReminders(value);
 
         if (useDatabase) db.updatePlayerOptionsEntry(getPlayer(uuid));
@@ -84,13 +87,13 @@ public class UserManager {
 
 
 
-    public boolean getOptOutReminders(UUID uuid) {
+    public boolean getOptOutReminders(String uuid) {
         return getPlayer(uuid).isOptOutReminders();
     }
 
 
 
-    public void setFluidReminders(UUID uuid, boolean value) {
+    public void setFluidReminders(String uuid, boolean value) {
         getPlayer(uuid).setFluidReminders(value);
 
         if (useDatabase) db.updatePlayerOptionsEntry(getPlayer(uuid));
@@ -99,19 +102,35 @@ public class UserManager {
 
 
 
-    public boolean getFluidReminders(UUID uuid) {
+    public boolean getFluidReminders(String uuid) {
         return getPlayer(uuid).isFluidReminders();
     }
 
 
 
-    public boolean hasPronouns(UUID uuid) {
+    public void setUsername(String uuid, String username) {
+        getPlayer(uuid).setUsername(username.toLowerCase());
+
+        if (useDatabase) db.updateUsername(uuid, username);
+        else setSingleValue(uuid, "username", username.toLowerCase());
+    }
+
+
+
+    public String getUsername(String uuid) {
+        return getPlayer(uuid).getUsername();
+    }
+
+
+
+
+    public boolean hasPronouns(String uuid) {
         return (getPlayer(uuid).getPronouns().size() > 0);
     }
 
 
 
-    public void setUserPronouns(UUID uuid, int... pronouns) {
+    public void setUserPronouns(String uuid, int... pronouns) {
         ArrayList<Integer> ids = new ArrayList<>();
         for (int id : pronouns) ids.add(id);
         setUserPronouns(uuid, ids);
@@ -119,7 +138,7 @@ public class UserManager {
 
 
 
-    public void setUserPronouns(UUID uuid, List<Integer> pronouns) {
+    public void setUserPronouns(String uuid, List<Integer> pronouns) {
         getPlayer(uuid).setPronouns(pronouns);
 
         if (useDatabase) db.updatePlayerPronounsEntry(getPlayer(uuid));
@@ -130,7 +149,7 @@ public class UserManager {
 
 
 
-    private void setSingleValue(UUID uuid, String key, Object value) {
+    private void setSingleValue(String uuid, String key, Object value) {
         YamlConfiguration config = getUserFile(uuid);
         config.set(key, value);
         setUserFile(uuid, config);
@@ -138,7 +157,7 @@ public class UserManager {
 
 
 
-    public List<Integer> getUserPronouns(UUID uuid) {
+    public List<Integer> getUserPronouns(String uuid) {
         return getPlayer(uuid).getPronouns();
     }
 
@@ -155,7 +174,7 @@ public class UserManager {
      * @return the pronoun of the specified type.
      * @throws IllegalArgumentException when the type is not one of the three.
      */
-    public String getUserPronoun(UUID uuid, String type, boolean random) {
+    public String getUserPronoun(String uuid, String type, boolean random) {
         List<Integer> sets = getUserPronouns(uuid);
 
         int set;
@@ -183,7 +202,7 @@ public class UserManager {
         }
     }
 
-    public String getDisplayUserPronouns(UUID uuid) {
+    public String getDisplayUserPronouns(String uuid) {
         return getDisplayFromList(getUserPronouns(uuid));
     }
 
@@ -206,7 +225,7 @@ public class UserManager {
         List<Integer> pronouns = user.getIntegerList("pronouns");
         if (pronouns == null) pronouns = new ArrayList<>();
 
-        return new GPPlayer(uuid, pronouns, user.getBoolean("opt-out-of-reminders", defaultReminders), user.getBoolean("fluid-reminders", false));
+        return new GPPlayer(uuid, user.getString("username"), pronouns, user.getBoolean("opt-out-of-reminders", defaultReminders), user.getBoolean("fluid-reminders", false));
     }
 
     private YamlConfiguration getUserFile(String uuid) {
@@ -214,11 +233,7 @@ public class UserManager {
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    private YamlConfiguration getUserFile(UUID uuid) {
-        return getUserFile(uuid.toString());
-    }
-
-    private void setUserFile(UUID uuid, YamlConfiguration config) {
+    private void setUserFile(String uuid, YamlConfiguration config) {
         File file = new File(plugin.getDataFolder() + "/users/" + uuid + ".yml");
         try {
             config.save(file);

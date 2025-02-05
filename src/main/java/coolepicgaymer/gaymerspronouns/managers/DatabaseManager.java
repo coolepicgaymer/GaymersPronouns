@@ -2,11 +2,11 @@ package coolepicgaymer.gaymerspronouns.managers;
 
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import coolepicgaymer.gaymerspronouns.types.GPPlayer;
+import org.bukkit.command.CommandSender;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DatabaseManager {
 
@@ -33,14 +33,37 @@ public class DatabaseManager {
         setup();
     }
 
+    public void close() {
+        try {
+            if (connection != null && !connection.isClosed()) connection.close();
+        } catch (SQLException e) {
+            plugin.getLogger().warning(MessageManager.getMessage("console.sql.generic-error"));
+            e.printStackTrace();
+        }
+    }
+
+    public void test(CommandSender sender) {
+        String uuid = "semiaquatic-egglaying-mammalofaction"; // So you've found my silly little fake uuid, huh... Don't blame me, I needed 36 characters and perry is cool.
+
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.start"));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.setup", booleanToTestString(testConnection())));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.insert", booleanToTestString(testInsert(uuid))));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.update", booleanToTestString(testUpdate(uuid))));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.select", booleanToTestString(testSelect(uuid))));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.delete", booleanToTestString(testDelete(uuid))));
+        sender.sendMessage(MessageManager.getMessage("configuration.database.test.end"));
+    }
+
+    private String booleanToTestString(boolean bool) {
+        return bool ? MessageManager.getMessage("configuration.misc.pass") : MessageManager.getMessage("configuration.misc.fail");
+    }
+
     private Connection getConnection(boolean force) {
-        if (connection == null || force) {
-            try {
-                connection = DriverManager.getConnection(url, user, password);
-            } catch (SQLException e) {
-                plugin.getLogger().warning(MessageManager.getMessage("console.sql.not-connected"));
-                e.printStackTrace();
-            }
+        try {
+            if (connection == null || connection.isClosed() || force) connection = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            plugin.getLogger().warning(MessageManager.getMessage("console.sql.not-connected"));
+            e.printStackTrace();
         }
 
         return connection;
@@ -51,7 +74,7 @@ public class DatabaseManager {
             Statement statement = getConnection(false).createStatement();
 
             statement.execute("CREATE TABLE IF NOT EXISTS player_pronouns(player char(36), pronoun_id int, priority int)");
-            statement.execute("CREATE TABLE IF NOT EXISTS player_pronoun_options(player char(36) primary key, opt_out_reminders boolean, fluid_reminders boolean)");
+            statement.execute("CREATE TABLE IF NOT EXISTS player_pronoun_options(player char(36) primary key, opt_out_reminders boolean, fluid_reminders boolean, username varchar(16))");
             //statement.execute("CREATE TABLE IF NOT EXISTS pronoun_sets(id int primary key, display varchar(32), dominant varchar(16), subjective varchar(16), objective varchar(16), possessive varchar(16), reflexive varchar(16), verb varchar(16), hidden boolean)");
 
             statement.close();
@@ -65,6 +88,7 @@ public class DatabaseManager {
         try {
             boolean optOutReminders;
             boolean fluidReminders;
+            String username;
 
             PreparedStatement statementOptions = getConnection(false).prepareStatement("SELECT * FROM player_pronoun_options WHERE player = ?");
             PreparedStatement statementPronouns = getConnection(false).prepareStatement("SELECT * FROM player_pronouns WHERE player = ? ORDER BY priority");
@@ -78,9 +102,11 @@ public class DatabaseManager {
             if (resultOptions.next()) {
                 optOutReminders = (resultOptions.getInt(2) != 0);
                 fluidReminders = (resultOptions.getInt(3) != 0);
+                username = resultOptions.getString(4);
             } else {
                 optOutReminders = defaults.isOptOutReminders();
                 fluidReminders = defaults.isFluidReminders();
+                username = defaults.getUsername();
 
                 createPlayerOptionsEntry(defaults);
             }
@@ -93,7 +119,30 @@ public class DatabaseManager {
             statementOptions.close();
             statementPronouns.close();
 
-            return new GPPlayer(uuid.toString(), pronouns, optOutReminders, fluidReminders);
+            return new GPPlayer(uuid, username, pronouns, optOutReminders, fluidReminders);
+        } catch (SQLException e) {
+            plugin.getLogger().warning(MessageManager.getMessage("console.sql.query-error"));
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String tryGetOfflineUUID(String username) {
+        try {
+            String uuid = null;
+
+            PreparedStatement statementOptions = getConnection(false).prepareStatement("SELECT player FROM player_pronoun_options WHERE username = ?");
+
+            statementOptions.setString(1, username);
+
+            ResultSet resultOptions = statementOptions.executeQuery();
+
+            if (resultOptions.next()) uuid = resultOptions.getString(1);
+
+            statementOptions.close();
+
+            return uuid;
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql.query-error"));
             e.printStackTrace();
@@ -103,11 +152,12 @@ public class DatabaseManager {
     }
 
     public void createPlayerOptionsEntry(GPPlayer defaults) throws SQLException {
-        PreparedStatement statement = getConnection(false).prepareStatement("INSERT INTO player_pronoun_options(player, opt_out_reminders, fluid_reminders) VALUES (?, ?, ?)");
+        PreparedStatement statement = getConnection(false).prepareStatement("INSERT INTO player_pronoun_options(player, opt_out_reminders, fluid_reminders, username) VALUES (?, ?, ?, ?)");
 
         statement.setString(1, defaults.getUuid());
         statement.setBoolean(2, defaults.isOptOutReminders());
         statement.setBoolean(3, defaults.isFluidReminders());
+        statement.setString(4, defaults.getUsername());
 
         statement.executeUpdate();
 
@@ -121,6 +171,25 @@ public class DatabaseManager {
             statement.setBoolean(1, player.isOptOutReminders());
             statement.setBoolean(2, player.isFluidReminders());
             statement.setString(3, player.getUuid());
+
+            statement.executeUpdate();
+
+            statement.close();
+        } catch (SQLException e) {
+            plugin.getLogger().warning(MessageManager.getMessage("console.sql-update-error"));
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean updateUsername(String uuid, String username) {
+        try {
+            PreparedStatement statement = getConnection(false).prepareStatement("UPDATE player_pronoun_options SET username = ? WHERE player = ?");
+
+            statement.setString(1, username);
+            statement.setString(2, uuid);
 
             statement.executeUpdate();
 
@@ -162,5 +231,89 @@ public class DatabaseManager {
         }
 
         return true;
+    }
+
+    private boolean testConnection() {
+        try {
+            if (connection == null || connection.isClosed()) connection = DriverManager.getConnection(url, user, password);
+            if (connection != null && !connection.isClosed()) return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private boolean testDelete(String uuid) {
+        try {
+            PreparedStatement deleteStatement = getConnection(false).prepareStatement("DELETE FROM player_pronouns WHERE player = ?");
+
+            deleteStatement.setString(1, uuid);
+            deleteStatement.executeUpdate();
+
+            deleteStatement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean testInsert(String uuid) {
+        try {
+            PreparedStatement statement = getConnection(false).prepareStatement("INSERT INTO player_pronouns(player, pronoun_id, priority) VALUES (?, ?, ?)");
+
+            statement.setString(1, uuid);
+            statement.setInt(2, -1);
+            statement.setInt(3, 2);
+
+            statement.executeUpdate();
+
+            statement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean testUpdate(String uuid) {
+        try {
+            PreparedStatement statement = getConnection(false).prepareStatement("UPDATE player_pronouns SET pronoun_id = ?, priority = ? WHERE player = ?");
+
+            statement.setInt(1, 1);
+            statement.setInt(2, 1);
+            statement.setString(3, uuid);
+
+            statement.executeUpdate();
+
+            statement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean testSelect(String uuid) {
+        try {
+            PreparedStatement statement = getConnection(false).prepareStatement("SELECT * FROM player_pronouns WHERE player = ? ORDER BY priority");
+
+            statement.setString(1, uuid);
+
+            ResultSet response = statement.executeQuery();
+
+            boolean result = response.next();
+
+            statement.close();
+
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -29,8 +29,9 @@ public class DisplayManager {
 
 
 
-    public void updateDisplay(UUID uuid) {
-        if (tablist) updateDisplay(Bukkit.getPlayer(uuid));
+    public void updateDisplay(String uuid) {
+        Player player;
+        if (tablist && (player = Bukkit.getPlayer(UUID.fromString(uuid))) != null) updateDisplay(player);
     }
 
     public void updateDisplay(Player player) {

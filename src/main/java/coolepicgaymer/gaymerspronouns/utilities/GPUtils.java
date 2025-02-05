@@ -18,7 +18,7 @@ public class GPUtils {
     }
 
     public static String replaceVariables(Player player, String string) {
-        String s = ChatColor.translateAlternateColorCodes('&', string.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{PRONOUNS}", userManager.getDisplayUserPronouns(player.getUniqueId())));
+        String s = ChatColor.translateAlternateColorCodes('&', string.replace("{DISPLAYNAME}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{PRONOUNS}", userManager.getDisplayUserPronouns(player.getUniqueId().toString())));
         if (papi) return PlaceholderAPI.setPlaceholders(player, s);
         else return s;
     }

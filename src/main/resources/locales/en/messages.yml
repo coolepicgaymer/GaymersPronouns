@@ -86,6 +86,7 @@ console:
     migration-started: "A player data migration was started by {0}."
     migration-success: "Migration of player data was successful."
     migration-error: "Migration of player data failed."
+    generic-error: "There was an error with the SQL database."
 assignments:
   assigned-new: "&7Assigned the pronouns &f{0}&7 for &f{1}&7."
   assigned-changed: "&7Assigned the pronouns &f{0}&7 for &f{1}&7 (Previously &f{2}&7)."
@@ -248,6 +249,8 @@ configuration:
     generic-message: "Hello"
     true: "&aYes"
     false: "&cNo"
+    pass: "&aPass"
+    fail: "&cFail"
   database:
     migration:
       confirm: "&fAre you sure you want to migrate all existing local player data to the database? This will overwrite any existing pronoun data in the database but keep the options data (fluid reminders, etc.) and may take a while. Type &c/{0} migratedata confirm&f to confirm. Also reloads the plugin when done. &cNot recommended for large amounts of players."
@@ -255,6 +258,14 @@ configuration:
       success: "&aAll local player data has been migrated to the database successfully and the plugin was reloaded."
       error: "&cAn error occurred while migrating the player data to the database."
       not-enabled: "&cYou must enable use of the SQL database in the config.yml before migrating."
+    test:
+      start: "&fStarting SQL connection test..."
+      setup: "&fTest 1 &7(connection): {0}"
+      insert: "&fTest 2 &7(insert): {0}"
+      update: "&fTest 3 &7(update): {0}"
+      select: "&fTest 4 &7(select): {0}"
+      delete: "&fTest 5 &7(delete): {0}"
+      end: "&fEnded connection test."
   help: "&cHere's some help with commands:"
   help-assign: # Variables here don't increase from {0} to {1}, {2} etc. because it uses a different method for displaying it. All variables below in the help section should be {0}.
     - "&8- &7/{0} &fassign &8- &fAssign or change someone else's pronouns."
@@ -268,3 +279,4 @@ configuration:
     - "&8- &7/{0} &fpapi &8- &fInfo on how to use PlaceholderAPI (if installed)."
   help-database:
     - "&8- &7/{0} &fmigratedata&8- &fMigrates any local player data to the database."
+    - "&8- &7/{0} &ftestsql&8- &fTests the connection to the SQL database."

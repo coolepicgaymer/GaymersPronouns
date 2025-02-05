@@ -47,27 +47,27 @@ public class PlaceholderManager extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         if (params.equalsIgnoreCase("pronouns")) {
-            return userManager.getDisplayUserPronouns(player.getUniqueId());
+            return userManager.getDisplayUserPronouns(player.getUniqueId().toString());
         }
         else if (params.equalsIgnoreCase("subjective")) {
-            if (!params.startsWith("S")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
-            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+            if (!params.startsWith("S")) return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random));
         }
         else if (params.equalsIgnoreCase("objective")) {
-            if (!params.startsWith("O")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
-            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+            if (!params.startsWith("O")) return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random));
         }
         else if (params.equalsIgnoreCase("possessive")) {
-            if (!params.startsWith("P")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
-            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+            if (!params.startsWith("P")) return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random));
         }
         else if (params.equalsIgnoreCase("reflexive")) {
-            if (!params.startsWith("R")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
-            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+            if (!params.startsWith("R")) return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random));
         }
         else if (params.equalsIgnoreCase("verb")) {
-            if (!params.startsWith("V")) return (userManager.getUserPronoun(player.getUniqueId(), params, random)).toLowerCase();
-            return (userManager.getUserPronoun(player.getUniqueId(), params, random));
+            if (!params.startsWith("V")) return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random)).toLowerCase();
+            return (userManager.getUserPronoun(player.getUniqueId().toString(), params, random));
         }
         return null;
     }

@@ -54,7 +54,7 @@ public class PronounsMenu {
 
         if (tutorial) inv.setItem(29, InventoryUtils.getItem(new ItemStack(Material.BOOK), MessageManager.getMessage("info-item-name"), MessageManager.getMessages("info-item-lore")));
 
-        if (!userManager.getFluidReminders(player.getUniqueId())) inv.setItem(44, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
+        if (!userManager.getFluidReminders(player.getUniqueId().toString())) inv.setItem(44, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
         else inv.setItem(44, InventoryUtils.getItem(new ItemStack(Material.LIME_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
 
         return inv;
@@ -104,15 +104,15 @@ public class PronounsMenu {
 
     public static void onClick(InventoryClickEvent e) {
         if (e.getSlot() == 44) {
-            if (!userManager.getFluidReminders(e.getWhoClicked().getUniqueId())) {
+            if (!userManager.getFluidReminders(e.getWhoClicked().getUniqueId().toString())) {
                 e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(Material.LIME_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
-                userManager.setFluidReminders(e.getWhoClicked().getUniqueId(), true);
+                userManager.setFluidReminders(e.getWhoClicked().getUniqueId().toString(), true);
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("toggle-fluid-reminders", MessageManager.getMessage("misc.enabled")));
                 if (log) logger.info(MessageManager.getMessage("console.fluid-reminders-toggled", MessageManager.getMessage("misc.enabled"), e.getWhoClicked().getName()));
             } else {
                 e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
-                userManager.setFluidReminders(e.getWhoClicked().getUniqueId(), false);
+                userManager.setFluidReminders(e.getWhoClicked().getUniqueId().toString(), false);
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("toggle-fluid-reminders", MessageManager.getMessage("misc.disabled")));
                 if (log) logger.info(MessageManager.getMessage("console.fluid-reminders-toggled", MessageManager.getMessage("misc.disabled"), e.getWhoClicked().getName()));
@@ -127,12 +127,12 @@ public class PronounsMenu {
                 else {
                     InventoryUtils.playSound(e.getWhoClicked(), true);
                     if (log) {
-                        if (userManager.hasPronouns(e.getWhoClicked().getUniqueId())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), userManager.getDisplayFromList(picked.get(e.getWhoClicked())), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                        if (userManager.hasPronouns(e.getWhoClicked().getUniqueId().toString())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), userManager.getDisplayFromList(picked.get(e.getWhoClicked())), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
                         else logger.info(MessageManager.getMessage("console.picked-new", e.getWhoClicked().getName(), userManager.getDisplayFromList(picked.get(e.getWhoClicked()))));
                     }
-                    userManager.setUserPronouns(e.getWhoClicked().getUniqueId(), picked.get(e.getWhoClicked()));
+                    userManager.setUserPronouns(e.getWhoClicked().getUniqueId().toString(), picked.get(e.getWhoClicked()));
                     e.getWhoClicked().closeInventory();
-                    e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                    e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
                 }
             } else {
                 InventoryUtils.playSound(e.getWhoClicked(), true);
@@ -159,12 +159,12 @@ public class PronounsMenu {
             } else {
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 if (log) {
-                    if (userManager.hasPronouns(e.getWhoClicked().getUniqueId())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup1(e.getWhoClicked(), e.getSlot())).getDisplay(), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                    if (userManager.hasPronouns(e.getWhoClicked().getUniqueId().toString())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup1(e.getWhoClicked(), e.getSlot())).getDisplay(), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
                     else logger.info(MessageManager.getMessage("console.picked-new", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup1(e.getWhoClicked(), e.getSlot())).getDisplay()));
                 }
-                userManager.setUserPronouns(e.getWhoClicked().getUniqueId(), getClickedGroup1(e.getWhoClicked(), e.getSlot()));
+                userManager.setUserPronouns(e.getWhoClicked().getUniqueId().toString(), getClickedGroup1(e.getWhoClicked(), e.getSlot()));
                 e.getWhoClicked().closeInventory();
-                e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
             }
         } else if (Arrays.stream(slots).boxed().collect(Collectors.toList()).contains(e.getSlot()-4)) {
             if (multiple.get(e.getWhoClicked())) {
@@ -180,12 +180,12 @@ public class PronounsMenu {
             } else {
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 if (log) {
-                    if (userManager.hasPronouns(e.getWhoClicked().getUniqueId())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup2(e.getWhoClicked(), e.getSlot())).getDisplay(), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                    if (userManager.hasPronouns(e.getWhoClicked().getUniqueId().toString())) logger.info(MessageManager.getMessage("console.picked-changed", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup2(e.getWhoClicked(), e.getSlot())).getDisplay(), userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
                     else logger.info(MessageManager.getMessage("console.picked-new", e.getWhoClicked().getName(), pronounManager.getPronounSets().get(getClickedGroup2(e.getWhoClicked(), e.getSlot())).getDisplay()));
                 }
-                userManager.setUserPronouns(e.getWhoClicked().getUniqueId(), getClickedGroup2(e.getWhoClicked(), e.getSlot()));
+                userManager.setUserPronouns(e.getWhoClicked().getUniqueId().toString(), getClickedGroup2(e.getWhoClicked(), e.getSlot()));
                 e.getWhoClicked().closeInventory();
-                e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId())));
+                e.getWhoClicked().sendMessage(MessageManager.getMessage("pronouns-set", userManager.getDisplayUserPronouns(e.getWhoClicked().getUniqueId().toString())));
             }
         }
     }
