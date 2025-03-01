@@ -50,15 +50,17 @@ public class PlayerJoin implements Listener {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> displayManager.updateDisplay(e.getPlayer()), delay);
         }
 
-        if (popup && !e.getPlayer().hasPlayedBefore()) {
-            e.getPlayer().openInventory(PronounsMenu.getInventory(e.getPlayer()));
-        } else if (userManager.hasPronouns(e.getPlayer().getUniqueId().toString())) {
-            if (userManager.getFluidReminders(e.getPlayer().getUniqueId().toString())) {
-                sendReminder(e.getPlayer(), "fluid-reminder");
-            }
-        } else {
-            if (!userManager.getOptOutReminders(e.getPlayer().getUniqueId().toString())) {
-                sendReminder(e.getPlayer(), "no-pronouns-reminder");
+        if (!e.getPlayer().hasPermission("gaymerspronouns.use")) {
+            if (popup && !e.getPlayer().hasPlayedBefore()) {
+                e.getPlayer().openInventory(PronounsMenu.getInventory(e.getPlayer()));
+            } else if (userManager.hasPronouns(e.getPlayer().getUniqueId().toString())) {
+                if (userManager.getFluidReminders(e.getPlayer().getUniqueId().toString())) {
+                    sendReminder(e.getPlayer(), "fluid-reminder");
+                }
+            } else {
+                if (!userManager.getOptOutReminders(e.getPlayer().getUniqueId().toString())) {
+                    sendReminder(e.getPlayer(), "no-pronouns-reminder");
+                }
             }
         }
     }

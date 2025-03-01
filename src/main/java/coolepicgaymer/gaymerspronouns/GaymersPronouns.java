@@ -54,7 +54,7 @@ public final class GaymersPronouns extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        databaseManager.close();
+        if (databaseManager != null) databaseManager.close();
     }
 
     /**

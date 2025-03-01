@@ -20,6 +20,10 @@ public class MainPronounCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!sender.hasPermission("gaymerspronouns.use")) {
+            sender.sendMessage(MessageManager.getMessage("configuration.no-permission"));
+            return false;
+        }
         if (args.length > 0) {
             Player arg = Bukkit.getPlayer(args[0]);
             if (arg == null) {

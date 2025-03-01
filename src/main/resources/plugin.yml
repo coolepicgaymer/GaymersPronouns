@@ -1,5 +1,5 @@
 name: GaymersPronouns
-version: '${project.version}'
+version: '1.2.1'
 main: coolepicgaymer.gaymerspronouns.GaymersPronouns
 softdepend: [ PlaceholderAPI ]
 authors: [ coolepicgaymer ]
@@ -8,9 +8,11 @@ description: A simple, yet very customizable Minecraft chat plugin that adds pro
 commands:
   pronouns:
     aliases: [ pronoun ]
+    permission: gaymerspronouns.use
     description: Pick your pronouns or see others' pronouns.
   gaymerspronouns:
     aliases: [ gp ]
+    permission: gaymerspronouns.admin
     description: Admin command for GaymersPronouns.
 permissions:
   gaymerspronouns.*:
@@ -18,17 +20,20 @@ permissions:
     default: op
     children:
       gaymerspronouns.admin: true
-      gaymerspronouns.assign: true
-      gaymerspronouns.configure: true
-      gaymerspronouns.reload: true
-      gaymerspronouns.database: true
+      gaymerspronouns.admin.assign: true
+      gaymerspronouns.admin.configure: true
+      gaymerspronouns.admin.reload: true
+      gaymerspronouns.admin.database: true
   gaymerspronouns.admin:
     description: Allows the player to use the admin command.
-  gaymerspronouns.assign:
+  gaymerspronouns.admin.assign:
     description: Allows the player to assign pronouns to others.
-  gaymerspronouns.configure:
+  gaymerspronouns.admin.configure:
     description: Allows the player to configure the plugin from in-game.
-  gaymerspronouns.reload:
+  gaymerspronouns.admin.reload:
     description: Allows the player to reload the plugin.
-  gaymerspronouns.database:
+  gaymerspronouns.admin.database:
     description: Allows the player to use database commands.
+  gaymerspronouns.use:
+    default: true
+    description: Allows the player to pick their own pronouns and see others' pronouns.
