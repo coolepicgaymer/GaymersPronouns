@@ -68,7 +68,7 @@ public class PronounManager {
                 continue;
             }
             if (section.isSet(key + ".display")) {
-                pronouns.put(id, new PronounSet(section.getString(key + ".display"), section.getString(key + ".dominant", null), section.getString(key + ".subjective", getDefaultPronoun("subjective")), section.getString(key + ".objective", getDefaultPronoun("objective")), section.getString(key + ".possessive", getDefaultPronoun("possessive")), section.getString(key + ".reflexive", getDefaultPronoun("reflexive")), section.getString(key + ".verb", getDefaultPronoun("verb")), section.getBoolean(key + ".hidden", false)));
+                pronouns.put(id, new PronounSet(section.getString(key + ".display"), section.getString(key + ".dominant", null), section.getString(key + ".subjective", getDefaultPronoun("subjective")), section.getString(key + ".objective", getDefaultPronoun("objective")), section.getString(key + ".possessive", getDefaultPronoun("possessive")), section.getString(key + ".reflexive", getDefaultPronoun("reflexive")), section.getString(key + ".verb", getDefaultPronoun("verb")), section.getString(key + ".color", getDefaultPronoun("color")), section.getBoolean(key + ".hidden", false)));
             } else {
                 plugin.getLogger().warning("Pronoun " + key + " is invalid. Ignoring it for now...");
             }
@@ -101,6 +101,7 @@ public class PronounManager {
         defaults.put("possessive", section.getString(id + ".possessive"));
         defaults.put("reflexive", section.getString(id + ".reflexive"));
         defaults.put("verb", section.getString(id + ".verb"));
+        defaults.put("color", section.getString(id + ".color"));
     }
 
 
@@ -119,6 +120,7 @@ public class PronounManager {
             case "possessive":
             case "reflexive":
             case "verb":
+            case "color":
                 return defaults.get(type);
             default:
                 throw new IllegalArgumentException(type);

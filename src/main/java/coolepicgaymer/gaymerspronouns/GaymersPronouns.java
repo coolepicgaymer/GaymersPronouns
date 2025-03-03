@@ -82,7 +82,7 @@ public final class GaymersPronouns extends JavaPlugin {
 
         if (GPUtils.isPapiInstalled()) placeholderManager.reload();
 
-        PronounsMenu.reload(getConfig().getBoolean("show-tutorial-item"), getConfig().getBoolean("log-pronoun-changes"), getLogger());
+        PronounsMenu.reload(getConfig().getBoolean("show-tutorial-item"), getConfig().getBoolean("log-pronoun-changes"), getConfig().getBoolean("use-individual-colors"), getLogger());
     }
 
     public static UserManager getUserManager() {

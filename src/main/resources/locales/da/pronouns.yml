@@ -22,6 +22,9 @@ undefined-pronouns: "Ikke sat"
 #
 #   hidden: true            <-- Hvorvidt du vil skjule disse pronomener fra spilleres menuer. Det kan stadig blive tildelt af admins.
 #
+#   color: "&f"             <-- Farven brugt, når "use-individual-colors" er true i din config. Standard er "&f" eller farven på dit standard pronomen (3
+#                               som standard) hvis andet ikke er specificeret. Husk citationstegn, for at undgå problemer.
+#
 #   display: "De/Dem"       <-- Dette er hvordan det bliver vist, når det er de eneste pronomener valgt af en spiller. Dette er det eneste der faktisk er et krav.
 #
 #   dominant: "Dem"         <-- Dette er det dominante pronomen, som bliver brugt når mere end ét er valgt (f.eks. Han/Hun). Hvis ikke specificeret, bliver
@@ -76,6 +79,7 @@ pronouns:
     reflexive: "Sig selv"
     verb: "Er"
   3:
+    color: "&f"
     display: "De/Dem"
     dominant: "Dem"
     subjective: "De"

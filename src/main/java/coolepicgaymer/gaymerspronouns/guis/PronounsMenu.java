@@ -4,8 +4,10 @@ import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import coolepicgaymer.gaymerspronouns.managers.MessageManager;
 import coolepicgaymer.gaymerspronouns.managers.PronounManager;
 import coolepicgaymer.gaymerspronouns.managers.UserManager;
+import coolepicgaymer.gaymerspronouns.types.PronounSet;
 import coolepicgaymer.gaymerspronouns.utilities.InventoryUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -30,12 +32,14 @@ public class PronounsMenu {
 
     private static boolean tutorial;
     private static boolean log;
+    private static boolean individualColors;
 
     private static Logger logger;
 
-    public static void reload(boolean showTutorialBook, boolean logChanges, Logger console) {
+    public static void reload(boolean showTutorialBook, boolean logChanges, boolean useIndividualColors, Logger console) {
         tutorial = showTutorialBook;
         log = logChanges;
+        individualColors = useIndividualColors;
 
         logger = console;
     }
@@ -80,12 +84,15 @@ public class PronounsMenu {
         for (int i = (page-1)*9; i < page*9; i++) {
             if (i >= max) break;
             int id = pronounManager.getGroup1().get(i);
+            PronounSet set = pronounManager.getPronounSets().get(id);
             ItemStack stack = new ItemStack(Material.NAME_TAG);
             List<Integer> picks;
             if (multiple && (picks = picked.get(player)).contains(id)) {
                 stack = new ItemStack(Material.EMERALD_BLOCK, picks.indexOf(id)+1);
             }
-            inv.setItem(slots[i-((page-1)*9)], InventoryUtils.getItem(stack, "§c" + pronounManager.getPronounSets().get(pronounManager.getGroup1().get(i)).getDisplay()));
+
+            if (individualColors) inv.setItem(slots[i-((page-1)*9)], InventoryUtils.getItem(stack, ChatColor.translateAlternateColorCodes('&', set.getColor()) + set.getDisplay()));
+            else inv.setItem(slots[i-((page-1)*9)], InventoryUtils.getItem(stack, "§c" + set.getDisplay()));
         }
     }
 
@@ -93,12 +100,15 @@ public class PronounsMenu {
         for (int i = 0; i < 9; i++) {
             if (i >= pronounManager.getGroup2().size()) break;
             int id = pronounManager.getGroup2().get(i);
+            PronounSet set = pronounManager.getPronounSets().get(id);
             ItemStack stack = new ItemStack(Material.RABBIT_FOOT);
             List<Integer> picks;
             if (multiple && (picks = picked.get(player)).contains(id)) {
                 stack = new ItemStack(Material.EMERALD_BLOCK, picks.indexOf(id)+1);
             }
-            inv.setItem(slots[i]+4, InventoryUtils.getItem(stack, "§c" + pronounManager.getPronounSets().get(id).getDisplay()));
+
+            if (individualColors) inv.setItem(slots[i]+4, InventoryUtils.getItem(stack, ChatColor.translateAlternateColorCodes('&', set.getColor()) + set.getDisplay()));
+            else inv.setItem(slots[i]+4, InventoryUtils.getItem(stack, "§c" + set.getDisplay()));
         }
     }
 

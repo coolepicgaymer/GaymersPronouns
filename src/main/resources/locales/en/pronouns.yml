@@ -22,6 +22,9 @@ undefined-pronouns: "Not set"
 #
 #   hidden: false           <-- Whether you want to hide it from the picker menu for some reason. It can still be manually assigned by admins.
 #
+#   color: "&f"             <-- The color used when "use-individual-colors" is true in the config. Defaults to "&f" or the one you set for your
+#                               default pronoun (3 by default) if not set. Remember to use quotes to avoid issues.
+#
 #   display: "They/Them"    <-- This is how it's displayed when it's the only picked pronouns of a player. This is the only required attribute.
 #
 #   dominant: "They"        <-- This is the dominant pronoun used when it's in a set of multiple pronouns (e.g. She/They). If not specified, the first
@@ -78,6 +81,7 @@ pronouns:
     reflexive: "Herself"
     verb: "Is"
   3:
+    color: "&f"
     display: "They/Them"
     subjective: "They"
     objective: "Them"

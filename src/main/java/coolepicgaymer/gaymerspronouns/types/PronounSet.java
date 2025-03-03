@@ -9,6 +9,7 @@ public class PronounSet {
     String objective;
     String possessive;
     String reflexive;
+    String color;
 
     String verb;
 
@@ -27,7 +28,7 @@ public class PronounSet {
      * @param verb The verb associated with the pronoun (e.g. "Is", "Are", etc.)
      *
      */
-    public PronounSet(String display, String dominant, String subjective, String objective, String possessive, String reflexive, String verb, boolean hidden) {
+    public PronounSet(String display, String dominant, String subjective, String objective, String possessive, String reflexive, String verb, String color, boolean hidden) {
         this.display = display;
 
         if (dominant != null) this.dominant = dominant;
@@ -37,6 +38,7 @@ public class PronounSet {
         this.objective = objective;
         this.possessive = possessive;
         this.reflexive = reflexive;
+        this.color = color;
 
         this.verb = verb;
 
@@ -72,6 +74,8 @@ public class PronounSet {
     public String getVerb() {
         return verb;
     }
+
+    public String getColor() { return color; }
 
     public boolean isHidden() { return hidden; }
 

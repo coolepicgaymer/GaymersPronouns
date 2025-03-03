@@ -106,7 +106,7 @@ display-format:
   # IMPORTANT:
   # - Write "{MESSAGE}" for it to be replaced with the message.
   #
-  chat-format: "&7[{PRONOUNS}] &f<{DISPLAYNAME}&f> {MESSAGE}"
+  chat-format: "&7[{PRONOUNS}&7] &f<{DISPLAYNAME}&f> {MESSAGE}"
 
   #
   # This is how the little box will look when you hover over someone's name ONLY if chathover is enabled above.
@@ -130,7 +130,7 @@ display-format:
   # - Write "{USERNAME}" for it to be replaced with the player's username.
   # - Supports PlaceholderAPI.
   #
-  tab-list: "&7[{PRONOUNS}] &f{USERNAME}"
+  tab-list: "&7[{PRONOUNS}&7] &f{USERNAME}"
 
   #
   # Whether you want to update the tablist names every x seconds.
@@ -141,6 +141,20 @@ display-format:
   update-tablist-periodically: false
   tablist-update-delay: 60
 
+
+#
+# Whether you want to use pronoun-specific colors. When enabling, remember to edit your pronouns.yml to assign the colors as they are all white by default.
+# Colors are assigned by setting 'color' to a color code, e.g. &f or &c. You can see the default pronoun (3 by default) as it's the only one with an assigned color out of the box.
+#
+use-individual-colors: false
+
+#
+# When using individual colors, what color should the slash separating the pronouns be? Ignored if use-individual-colors is false. Leave empty ("") to let
+# the pronoun color itself continue into the separator.
+#
+# Note: This is not used when only one pronoun is selected (e.g. He/Him) but will only be used when combining multiple sets (e.g. He/They).
+#
+individual-separator-color: "&7"
 
 #
 # In case you want to use an SQL database. I won't provide much information for this one since if you want to use this, you probably know what you're doing.

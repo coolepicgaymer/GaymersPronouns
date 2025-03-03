@@ -2,6 +2,9 @@ package coolepicgaymer.gaymerspronouns.managers;
 
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import coolepicgaymer.gaymerspronouns.types.GPPlayer;
+import coolepicgaymer.gaymerspronouns.types.PronounSet;
+import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -20,6 +23,9 @@ public class UserManager {
     private boolean defaultReminders;
     private boolean useDatabase;
 
+    private boolean individualColors;
+    private String separatorColor;
+
     private HashMap<String, GPPlayer> players;
 
 
@@ -31,6 +37,9 @@ public class UserManager {
     public void reload() {
         defaultReminders = !plugin.getConfig().getBoolean("default-no-pronouns-reminder");
         useDatabase = plugin.getConfig().getBoolean("database.use");
+
+        individualColors = plugin.getConfig().getBoolean("use-individual-colors");
+        separatorColor = plugin.getConfig().getString("individual-separator-color", "&7");
 
         db = plugin.getDatabaseManager();
 
@@ -208,12 +217,19 @@ public class UserManager {
 
     public String getDisplayFromList(List<Integer> pronouns) {
         if (pronouns.size() == 1) {
-            return pronounManager.getPronounSets().get(pronouns.get(0)).getDisplay();
+            PronounSet set = pronounManager.getPronounSets().get(pronouns.get(0));
+
+            if (individualColors) return ChatColor.translateAlternateColorCodes('&', set.getColor() + set.getDisplay());
+            return set.getDisplay();
         } else if (pronouns.size() > 1) {
             StringBuilder result = new StringBuilder();
             for (int id : pronouns) {
-                result.append("/").append(pronounManager.getPronounSets().get(id).getDominant());
+                PronounSet set = pronounManager.getPronounSets().get(id);
+                if (individualColors) result.append(separatorColor).append("/").append(set.getColor()).append(set.getDominant());
+                else result.append("/").append(set.getDominant());
             }
+
+            if (individualColors) return ChatColor.translateAlternateColorCodes('&', result.substring(separatorColor.length() + 1));
             return result.substring(1);
         } else {
             return PronounManager.noPronouns;

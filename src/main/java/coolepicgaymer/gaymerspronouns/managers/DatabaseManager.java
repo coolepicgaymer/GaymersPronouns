@@ -63,7 +63,7 @@ public class DatabaseManager {
 
     private Connection getConnection(boolean force) {
         try {
-            // Force a new connection if prompted or null, also check validity of longer than 10 minutes since last connection.
+            // Force a new connection if prompted or null, also check validity if longer than 10 minutes since last connection.
             if (force || connection != null || (lastDbConnection < System.currentTimeMillis()-(1000*60*10) && !connection.isValid(1))) connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             plugin.getLogger().warning(MessageManager.getMessage("console.sql.not-connected"));
