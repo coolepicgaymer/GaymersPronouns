@@ -28,11 +28,12 @@ public class PlayerChat implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
-        if (chatFormat) e.setFormat(ChatColor.translateAlternateColorCodes('&', GPUtils.replaceVariables(e.getPlayer(), plugin.getConfig().getString("display-format.chat-format").replace("{MESSAGE}", e.getMessage()))));
+        if (chatFormat) e.setFormat(ChatColor.translateAlternateColorCodes('&', GPUtils.replaceVariables(e.getPlayer(), plugin.getConfig().getString("display-format.chat-format"))).replace("{MESSAGE}", "%2$s"));
         if (chatHover) {
             e.setCancelled(true);
-            TextComponent message = new TextComponent(e.getFormat());
+            TextComponent message = new TextComponent(e.getFormat().replace("%1$s", e.getPlayer().getName()));
             message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.translateAlternateColorCodes('&', GPUtils.replaceVariables(e.getPlayer(), String.join("\n", plugin.getConfig().getStringList("display-format.chat-hover")))))));
+            message.setText(message.getText().replace("%2$s", e.getMessage()));
             Bukkit.spigot().broadcast(message);
         }
     }

@@ -3,7 +3,6 @@ package coolepicgaymer.gaymerspronouns.managers;
 import coolepicgaymer.gaymerspronouns.GaymersPronouns;
 import coolepicgaymer.gaymerspronouns.types.GPPlayer;
 import coolepicgaymer.gaymerspronouns.types.PronounSet;
-import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

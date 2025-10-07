@@ -1,5 +1,5 @@
 name: GaymersPronouns
-version: '1.2.1'
+version: '1.2.3'
 main: coolepicgaymer.gaymerspronouns.GaymersPronouns
 softdepend: [ PlaceholderAPI ]
 authors: [ coolepicgaymer ]
@@ -25,14 +25,19 @@ permissions:
       gaymerspronouns.admin.reload: true
       gaymerspronouns.admin.database: true
   gaymerspronouns.admin:
+    default: op
     description: Allows the player to use the admin command.
   gaymerspronouns.admin.assign:
+    default: op
     description: Allows the player to assign pronouns to others.
   gaymerspronouns.admin.configure:
+    default: op
     description: Allows the player to configure the plugin from in-game.
   gaymerspronouns.admin.reload:
+    default: op
     description: Allows the player to reload the plugin.
   gaymerspronouns.admin.database:
+    default: op
     description: Allows the player to use database commands.
   gaymerspronouns.use:
     default: true
