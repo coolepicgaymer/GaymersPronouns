@@ -34,14 +34,31 @@ public class PronounsMenu {
     private static boolean log;
     private static boolean individualColors;
 
+    private static Material group1Material;
+    private static Material group2Material;
+    private static Material selectedMaterial;
+
     private static Logger logger;
 
-    public static void reload(boolean showTutorialBook, boolean logChanges, boolean useIndividualColors, Logger console) {
+    public static void reload(boolean showTutorialBook, boolean logChanges, boolean useIndividualColors, String group1Item, String group2Item, String selectedItem, Logger console) {
         tutorial = showTutorialBook;
         log = logChanges;
         individualColors = useIndividualColors;
 
+        group1Material = getMaterialOrDefault(group1Item, Material.NAME_TAG);
+        group2Material = getMaterialOrDefault(group2Item, Material.RABBIT_FOOT);
+        selectedMaterial = getMaterialOrDefault(selectedItem, Material.EMERALD_BLOCK);
+
         logger = console;
+    }
+
+    private static Material getMaterialOrDefault(String material, Material def) {
+        Material hopefullyNotNull = Material.getMaterial(material);
+        if (hopefullyNotNull != null) return hopefullyNotNull;
+        else {
+            logger.info("Invalid material in config: " + material + ". Defaulting to " + def + ".");
+            return def;
+        }
     }
 
     public static Inventory getInventory(Player player) {
@@ -85,10 +102,10 @@ public class PronounsMenu {
             if (i >= max) break;
             int id = pronounManager.getGroup1().get(i);
             PronounSet set = pronounManager.getPronounSets().get(id);
-            ItemStack stack = new ItemStack(Material.NAME_TAG);
+            ItemStack stack = new ItemStack(group1Material);
             List<Integer> picks;
             if (multiple && (picks = picked.get(player)).contains(id)) {
-                stack = new ItemStack(Material.EMERALD_BLOCK, picks.indexOf(id)+1);
+                stack = new ItemStack(selectedMaterial, picks.indexOf(id)+1);
             }
 
             if (individualColors) inv.setItem(slots[i-((page-1)*9)], InventoryUtils.getItem(stack, ChatColor.translateAlternateColorCodes('&', set.getColor()) + set.getDisplay()));
@@ -101,10 +118,10 @@ public class PronounsMenu {
             if (i >= pronounManager.getGroup2().size()) break;
             int id = pronounManager.getGroup2().get(i);
             PronounSet set = pronounManager.getPronounSets().get(id);
-            ItemStack stack = new ItemStack(Material.RABBIT_FOOT);
+            ItemStack stack = new ItemStack(group2Material);
             List<Integer> picks;
             if (multiple && (picks = picked.get(player)).contains(id)) {
-                stack = new ItemStack(Material.EMERALD_BLOCK, picks.indexOf(id)+1);
+                stack = new ItemStack(selectedMaterial, picks.indexOf(id)+1);
             }
 
             if (individualColors) inv.setItem(slots[i]+4, InventoryUtils.getItem(stack, ChatColor.translateAlternateColorCodes('&', set.getColor()) + set.getDisplay()));

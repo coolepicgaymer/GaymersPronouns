@@ -1,5 +1,5 @@
 name: GaymersPronouns
-version: '1.2.3'
+version: '1.2.4'
 main: coolepicgaymer.gaymerspronouns.GaymersPronouns
 softdepend: [ PlaceholderAPI ]
 authors: [ coolepicgaymer ]

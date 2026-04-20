@@ -77,6 +77,17 @@ default-no-pronouns-reminder: true
 show-tutorial-item: true
 
 #
+# Items shown in the menu
+#
+# Note: Further configuration can be done in messages.yml
+#
+gui:
+  items:
+    group1: NAME_TAG
+    group2: RABBIT_FOOT
+    selected: EMERALD_BLOCK
+
+#
 # This is where the pronouns will be displayed. Remove the hashtag in front of the ones you want.
 # The format of how they're shown is edited further down, don't worry.
 #
