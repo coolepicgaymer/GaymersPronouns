@@ -102,6 +102,15 @@ gui:
     group1: NAME_TAG
     group2: RABBIT_FOOT
     selected: EMERALD_BLOCK
+    reminder-enabled: LIME_DYE
+    reminder-disabled: GRAY_DYE
+    tutorial: BOOK
+    glass-row:
+      cancel: GRAY_STAINED_GLASS_PANE
+      multiple-start: CYAN_STAINED_GLASS_PANE
+      multiple-zero-selected: RED_STAINED_GLASS_PANE
+      multiple-single-selected: YELLOW_STAINED_GLASS_PANE
+      multiple-save: LIME_STAINED_GLASS_PANE
 
 #
 # This is where the pronouns will be displayed. Remove the hashtag in front of the ones you want.
