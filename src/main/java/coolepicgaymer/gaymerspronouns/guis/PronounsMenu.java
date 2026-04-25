@@ -9,6 +9,7 @@ import coolepicgaymer.gaymerspronouns.utilities.InventoryUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -38,16 +39,44 @@ public class PronounsMenu {
     private static Material group2Material;
     private static Material selectedMaterial;
 
+    private static Material reminderEnabled;
+    private static Material reminderDisabled;
+
+    private static Material nextPage;
+    private static Material previousPage;
+
+    private static Material tutorialItem;
+
+    private static Material glassCancel;
+    private static Material glassPickMultipleStart;
+    private static Material glassPickMultipleZeroSelected;
+    private static Material glassPickMultipleSingleSelected;
+    private static Material glassPickMultipleSave;
+
     private static Logger logger;
 
-    public static void reload(boolean showTutorialBook, boolean logChanges, boolean useIndividualColors, String group1Item, String group2Item, String selectedItem, Logger console) {
+    public static void reload(boolean showTutorialBook, boolean logChanges, boolean useIndividualColors, ConfigurationSection gui, Logger console) {
         tutorial = showTutorialBook;
         log = logChanges;
         individualColors = useIndividualColors;
 
-        group1Material = getMaterialOrDefault(group1Item, Material.NAME_TAG);
-        group2Material = getMaterialOrDefault(group2Item, Material.RABBIT_FOOT);
-        selectedMaterial = getMaterialOrDefault(selectedItem, Material.EMERALD_BLOCK);
+        group1Material = getMaterialOrDefault(gui.getString("items.group1", "NAME_TAG"), Material.NAME_TAG);
+        group2Material = getMaterialOrDefault(gui.getString("items.group2", "RABBIT_FOOT"), Material.RABBIT_FOOT);
+        selectedMaterial = getMaterialOrDefault(gui.getString("items.selected", "EMERALD_BLOCK"), Material.EMERALD_BLOCK);
+
+        reminderEnabled = getMaterialOrDefault(gui.getString("items.reminder-enabled", "LIME_DYE"), Material.LIME_DYE);
+        reminderDisabled = getMaterialOrDefault(gui.getString("items.reminder-disabled", "GRAY_DYE"), Material.GRAY_DYE);
+
+        nextPage = getMaterialOrDefault(gui.getString("items.next-page", "PAPER"), Material.PAPER);
+        previousPage = getMaterialOrDefault(gui.getString("items.previous-page", "ARROW"), Material.ARROW);
+
+        tutorialItem = getMaterialOrDefault(gui.getString("items.tutorial", "BOOK"), Material.BOOK);
+
+        glassCancel = getMaterialOrDefault(gui.getString("items.glass-row.cancel", "GRAY_STAINED_GLASS_PANE"), Material.GRAY_STAINED_GLASS_PANE);
+        glassPickMultipleStart = getMaterialOrDefault(gui.getString("items.glass-row.multiple-start", "CYAN_STAINED_GLASS_PANE"), Material.CYAN_STAINED_GLASS_PANE);
+        glassPickMultipleZeroSelected = getMaterialOrDefault(gui.getString("items.glass-row.multiple-zero-selected", "RED_STAINED_GLASS_PANE"), Material.RED_STAINED_GLASS_PANE);
+        glassPickMultipleSingleSelected = getMaterialOrDefault(gui.getString("items.glass-row.multiple-single-selected", "YELLOW_STAINED_GLASS_PANE"), Material.YELLOW_STAINED_GLASS_PANE);
+        glassPickMultipleSave = getMaterialOrDefault(gui.getString("items.glass-row.multiple-save", "LIME_STAINED_GLASS_PANE"), Material.LIME_STAINED_GLASS_PANE);
 
         logger = console;
     }
@@ -66,17 +95,17 @@ public class PronounsMenu {
         playerPage.put(player, 1);
         multiple.put(player, false);
 
-        for (int i = 41; i <= 43; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), MessageManager.getMessage("cancel-name"), MessageManager.getMessages("cancel-lore")));
+        for (int i = 41; i <= 43; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(glassCancel), MessageManager.getMessage("cancel-name"), MessageManager.getMessages("cancel-lore")));
 
         setMultiplePronounStatus(inv, 0);
 
         formatGroup1(player, inv, 1, false);
         formatGroup2(player, inv, false);
 
-        if (tutorial) inv.setItem(29, InventoryUtils.getItem(new ItemStack(Material.BOOK), MessageManager.getMessage("info-item-name"), MessageManager.getMessages("info-item-lore")));
+        if (tutorial) inv.setItem(29, InventoryUtils.getItem(new ItemStack(tutorialItem), MessageManager.getMessage("info-item-name"), MessageManager.getMessages("info-item-lore")));
 
-        if (!userManager.getFluidReminders(player.getUniqueId().toString())) inv.setItem(44, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
-        else inv.setItem(44, InventoryUtils.getItem(new ItemStack(Material.LIME_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
+        if (!userManager.getFluidReminders(player.getUniqueId().toString())) inv.setItem(44, InventoryUtils.getItem(new ItemStack(reminderDisabled), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
+        else inv.setItem(44, InventoryUtils.getItem(new ItemStack(reminderEnabled), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
 
         return inv;
     }
@@ -86,14 +115,10 @@ public class PronounsMenu {
     private static void formatGroup1(Player player, Inventory inv, int page, boolean multiple) {
         playerPage.put(player, page);
         int max = pronounManager.getGroup1().size();
-        boolean prev;
-        if (prev = (page > 1)) inv.setItem(28, InventoryUtils.getItem(new ItemStack(Material.ARROW), MessageManager.getMessage("previous-page-name")));
+        boolean prev = page > 1;
+        if (prev) inv.setItem(28, InventoryUtils.getItem(new ItemStack(previousPage), MessageManager.getMessage("previous-page-name")));
         else inv.setItem(28, new ItemStack(Material.AIR));
-        if (page*9 < max) inv.setItem(30, InventoryUtils.getItem(new ItemStack(Material.PAPER), MessageManager.getMessage("next-page-name")));
-        else if (prev) {
-            inv.setItem(28, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pick-above")));
-            inv.setItem(30, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pick-above")));
-        }
+        if (page*9 < max) inv.setItem(30, InventoryUtils.getItem(new ItemStack(nextPage), MessageManager.getMessage("next-page-name")));
         else inv.setItem(30, new ItemStack(Material.AIR));
         for (int i : slots) {
             inv.setItem(i, new ItemStack(Material.AIR));
@@ -132,13 +157,13 @@ public class PronounsMenu {
     public static void onClick(InventoryClickEvent e) {
         if (e.getSlot() == 44) {
             if (!userManager.getFluidReminders(e.getWhoClicked().getUniqueId().toString())) {
-                e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(Material.LIME_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
+                e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(reminderEnabled), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.disable"))));
                 userManager.setFluidReminders(e.getWhoClicked().getUniqueId().toString(), true);
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("toggle-fluid-reminders", MessageManager.getMessage("misc.enabled")));
                 if (log) logger.info(MessageManager.getMessage("console.fluid-reminders-toggled", MessageManager.getMessage("misc.enabled"), e.getWhoClicked().getName()));
             } else {
-                e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(Material.GRAY_DYE), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
+                e.getClickedInventory().setItem(44, InventoryUtils.getItem(new ItemStack(reminderDisabled), MessageManager.getMessage("pronoun-reminder-name"), MessageManager.getMessages("pronoun-reminder-lore", MessageManager.getMessage("misc.enable"))));
                 userManager.setFluidReminders(e.getWhoClicked().getUniqueId().toString(), false);
                 InventoryUtils.playSound(e.getWhoClicked(), true);
                 e.getWhoClicked().sendMessage(MessageManager.getMessage("toggle-fluid-reminders", MessageManager.getMessage("misc.disabled")));
@@ -239,10 +264,10 @@ public class PronounsMenu {
     }
 
     private static void setMultiplePronounStatus(Inventory inv, int status) {
-        if (status == 0) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.CYAN_STAINED_GLASS_PANE), MessageManager.getMessage("initialize-multiple-name"), MessageManager.getMessages("initialize-multiple-lore")));
-        else if (status == 1) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.RED_STAINED_GLASS_PANE), MessageManager.getMessage("not-enough-multiple-name"), MessageManager.getMessages("not-enough-multiple-lore")));
-        else if (status == 2) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
-        else for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(Material.LIME_STAINED_GLASS_PANE), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
+        if (status == 0) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(glassPickMultipleStart), MessageManager.getMessage("initialize-multiple-name"), MessageManager.getMessages("initialize-multiple-lore")));
+        else if (status == 1) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(glassPickMultipleZeroSelected), MessageManager.getMessage("not-enough-multiple-name"), MessageManager.getMessages("not-enough-multiple-lore")));
+        else if (status == 2) for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(glassPickMultipleSingleSelected), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
+        else for (int i = 36; i <= 40; i++) inv.setItem(i, InventoryUtils.getItem(new ItemStack(glassPickMultipleSave), MessageManager.getMessage("confirm-multiple-name"), MessageManager.getMessages("confirm-multiple-lore")));
     }
 
     private static void startPickMultiple(Player player) {
